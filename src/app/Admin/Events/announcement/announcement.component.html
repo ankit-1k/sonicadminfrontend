@@ -1,0 +1,153 @@
+<div class="container-fluid" *ngIf="!isLoading">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box scrollbar" style="height: 91vh;">
+                <div class="d-flex justify-content-between mt-3 mb-2 me-1">
+                    <h4 class="mt-1 ms-2 res-m-0">View Data <i class="bi bi-bootstrap-fill"></i></h4>
+                    <p-dropdown class="p-0 m-0" [options]="categories" [(ngModel)]="selectedCategory"
+                        (onChange)="onCategoryChange()" placeholder="Select a category" optionLabel="label"
+                        optionValue="value">
+                    </p-dropdown>
+                </div>
+                <p-table responsiveLayout="scroll" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5, 10, 15]"
+                    [value]="filteredannouncements">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th><button pButton (click)="showDialogAdd('right')" label="Add" icon="pi pi-plus"
+                                    class="w-100"></button></th>
+                            <th>Name</th>
+                            <th>Date</th>
+                            <th>Category</th>
+                            <th>Description</th>
+                            <th>Duration</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-announcement>
+                        <tr>
+                            <td>
+                                <p-button styleClass="p-button-rounded me-1 p-button-info p-button-text p-button-raised"
+                                    icon="pi pi-pencil" (click)="showDialogEdit('right',announcement)"></p-button>
+                                <p-button
+                                    styleClass="p-button-rounded me-1 p-button-danger p-button-text p-button-raised"
+                                    icon="pi pi-trash" (click)="deleteannouncement(announcement)"></p-button>
+                                <p-button styleClass="p-button-rounded p-button-success p-button-text p-button-raised"
+                                    icon="pi pi-eye" (click)="viewData(announcement)"></p-button>
+                            </td>
+                            <td>{{ announcement.name }}</td>
+                            <td>{{ announcement.date | date: 'short' }}</td>
+                            <td>{{ announcement.category }}</td>
+                            <td>{{announcement.desc}}</td>
+                            <td>{{announcement.duration}}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+        <div class="col-md-6 position-relative">
+            <div class="box scrollbar theme-light" style="height: 91vh;">
+                <div *ngIf="selectedannouncementForView">
+                    <h4 class="mt-4 ms-2 res-m-0">View Details</h4>
+                    <div class="card view-card ms-2 me-2 mt-4">
+                        <div class="card-body">
+                            <div class="card-text">
+                                <p><strong>Name:</strong> {{ selectedannouncementForView.name }}</p>
+                                <p><strong>Category:</strong> {{ selectedannouncementForView.category }}</p>
+                                <p><strong>Description:</strong> {{ selectedannouncementForView.desc }}</p>
+                                <p><strong>Date:</strong> {{ selectedannouncementForView.date | date: 'short' }}</p>
+                                <div class="d-flex justify-content-end">
+                                    <button pButton icon="pi pi-pencil" class="bg-dark"
+                                        (click)="showDialogEdit('right', selectedannouncementForView)">
+                                    </button>
+                                    <button pButton icon="pi pi-trash" class="bg-dark ms-1 res-m-0"
+                                        (click)="deleteannouncement(selectedannouncementForView)">
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="!selectedannouncementForView" class="d-flex justify-content-center align-items-center"
+                    style="height: 80vh;">
+                    <p class="sub-head blink fw-bold">Select a Data to view its details.</p>
+                </div>
+                <p *ngIf="!selectedannouncementForView" class="text-muted text-center" style="font-size: 10px;">
+                    This announcement is for a limited time period and will be automatically deleted when the time is over.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="full-vh">
+    <p-dialog header="Edit Data" [(visible)]="visibleEdit" [position]="position" [style]="{ height: '100vh' }">
+        <form [formGroup]="announcementFrom" (ngSubmit)="submitannouncement()">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="field">
+                        <label for="" class="d-block">Name</label>
+                        <input type="text" class="w-100" pInputText formControlName="name">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="field">
+                        <label for="" class="d-block">Category</label>
+                        <p-dropdown [options]="categories" formControlName="category" (onChange)="onCategoryChange()"
+                            placeholder="Select a category" class="w-100" optionLabel="label" optionValue="value">
+                        </p-dropdown>
+                    </div>
+                </div>
+            </div>
+            <div class="field mt-2">
+                <label for="" class="d-block">Description</label>
+                <textarea type="text" rows="5" class="w-100" pInputText formControlName="desc"></textarea>
+            </div>
+
+            <button pButton label="Update" class="mt-1" type="submit" [disabled]="announcementFrom.invalid"></button>
+        </form>
+    </p-dialog>
+</div>
+
+<!-- Add announcement Dialog -->
+<div class="full-vh">
+    <p-dialog header="Add Data" [(visible)]="visibleAdd" [position]="position" [style]="{ height: '100vh' }">
+        <form [formGroup]="announcementFrom" (ngSubmit)="submitannouncement()">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="field">
+                        <label for="" class="d-block">Name</label>
+                        <input class="w-100" type="text" pInputText formControlName="name">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="field">
+                        <label for="" class="d-block">Category</label>
+                        <p-dropdown class="w-100" [options]="categories" formControlName="category"
+                            (onChange)="onCategoryChange()" placeholder="Select a category" optionLabel="label"
+                            optionValue="value">
+                        </p-dropdown>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="field">
+                        <label for="" class="d-block">Schedule For</label>
+                        <p-dropdown class="w-100" [options]="durations" formControlName="duration"
+                            (onChange)="onCategoryChange()" placeholder="Select a category" optionLabel="label"
+                            optionValue="value">
+                        </p-dropdown>
+                    </div>
+                </div>
+            </div>
+            <div class="field mt-2">
+                <label for="" class="d-block">Description</label>
+                <textarea type="text" rows="5" class="w-100" pInputText formControlName="desc"></textarea>
+            </div>
+
+            <button pButton label="Submit" type="submit" [disabled]="announcementFrom.invalid"></button>
+        </form>
+    </p-dialog>
+</div>
+
+<!-- loader -->
+<div *ngIf="isLoading">
+    <app-loader></app-loader>
+</div>

@@ -1,0 +1,194 @@
+<div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="https://cdn.pixabay.com/photo/2016/11/21/17/59/blackboard-1846865_640.jpg" class="d-block w-100"
+                alt="...">
+            <div class="carousel-caption d-none d-md-block">
+                <h4 class="head">Services For </h4>
+                <h6>{{ siteNames.join(', ') }}</h6>
+                <p>These sites can Post Projects, Add News, Change Layout, Add Events etc..</p>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="https://cdn.pixabay.com/photo/2019/11/07/12/18/slate-4608726_640.jpg" class="d-block w-100"
+                alt="...">
+            <div class="carousel-caption d-none d-md-block">
+                <h4 class="head">Announcements</h4>
+                <p>Customers can Make Announcements on their sites.</p>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="https://cdn.pixabay.com/photo/2015/12/01/15/43/black-1072366_640.jpg" class="d-block w-100"
+                alt="...">
+            <div class="carousel-caption d-none d-md-block">
+                <h4 class="head">Super Admin</h4>
+                <p>Only for super admin for managing TELE Data. OTP required for access.</p>
+            </div>
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+<div class="container">
+    <h2 class="head text-theme text-center mt-6">Services</h2>
+    <div class="row mt-5">
+        <div class="col-md-3">
+            <div class="card service-card" routerLink="/projects">
+                <div class="card-body">
+                    <div class="card-title lead fw-bold">Projects</div>
+                    <div class="card-text">
+                        <p>
+                            Total {{allProjects.length}} Projects Uploaded by Users
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card service-card" routerLink="/blog">
+                <div class="card-body">
+                    <div class="card-title lead fw-bold">B</div>
+                    <div class="card-text">
+                        <p>
+                            Total {{allBlogs.length}} B Uploaded by Users
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card service-card" routerLink="/services">
+                <div class="card-body">
+                    <div class="card-title lead fw-bold">Services</div>
+                    <div class="card-text">
+                        <p>
+                            Total {{allService.length}} Services Uploaded by Users
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card service-card" routerLink="/news">
+                <div class="card-body">
+                    <div class="card-title lead fw-bold">News</div>
+                    <div class="card-text">
+                        <p>
+                            Total {{allNews.length}} News Uploaded by Users
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-md-3">
+            <div class="card service-card" routerLink="/websites">
+                <div class="card-body">
+                    <div class="card-title lead fw-bold">Sites</div>
+                    <div class="card-text">
+                        <p>
+                            Managing {{allSites.length}} Sites.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card service-card" routerLink="/announcement">
+                <div class="card-body">
+                    <div class="card-title lead fw-bold">Announcements</div>
+                    <div class="card-text">
+                        <p>
+                            Currently {{allAnnouncements.length}} Announcements Added by Users.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card service-card" routerLink="/telusers">
+                <div class="card-body">
+                    <div class="card-title lead fw-bold">Users</div>
+                    <div class="card-text">
+                        <p>
+                            Managing {{allTeleUsers.length}} TeleUsers Data.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card service-card" routerLink="/faq">
+                <div class="card-body">
+                    <div class="card-title lead fw-bold">FAQs</div>
+                    <div class="card-text">
+                        <p>
+                            Total {{allFaq.length}} Faqs Uploaded by Users.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- contact form -->
+<div>
+    <div class="container">
+        <h2 class="head text-theme text-center mt-6 mb-2">Contact US</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <form class="row" [formGroup]="requestForm" (ngSubmit)="submitForm()">
+                    <div class="col-md-6">
+                        <div class="field">
+                            <label for="" class="d-block">Name</label>
+                            <input type="text" pInputText class="w-100" formControlName="name">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="field">
+                            <label for="" class="d-block">Email</label>
+                            <input type="text" pInputText class="w-100" formControlName="email">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="field mt-2">
+                            <label for="" class="d-block">Phone</label>
+                            <input type="text" pInputText class="w-100" formControlName="phone">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="field mt-2">
+                            <label for="" class="d-block">Subject</label>
+                            <input type="text" pInputText class="w-100" formControlName="subject">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="field mt-2">
+                            <label for="" class="d-block">Message</label>
+                            <textarea pInputTextarea rows="4" class="w-100" formControlName="message"></textarea>
+                        </div>
+                    </div>
+                    <div class="">
+                        <button pButton label="Send" icon="pi pi-send" class="w-100" style="border-radius: 0px;"></button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-6">
+
+            </div>
+        </div>
+    </div>
+</div>
+<app-footer></app-footer>

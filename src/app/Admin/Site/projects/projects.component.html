@@ -1,0 +1,183 @@
+<div class="container-fluid" *ngIf="!isLoading">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box scrollbar" style="height: 91vh;">
+                <div class="d-flex justify-content-between mt-3 mb-2 me-1">
+                    <h4 class="mt-1 ms-2 res-m-0">View Data <i class="bi bi-bootstrap-fill"></i></h4>
+                    <p-dropdown class="p-0 m-0" [options]="categories" [(ngModel)]="selectedCategory"
+                        (onChange)="onCategoryChange()" placeholder="Select a category" optionLabel="label"
+                        optionValue="value">
+                    </p-dropdown>
+                </div>
+                <p-table responsiveLayout="scroll" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5, 10, 15]"
+                    [value]="filteredProjects">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th><button pButton (click)="showDialogAdd('right')" label="Add" icon="pi pi-plus"
+                                    class="w-100"></button></th>
+                            <th>Name</th>
+                            <th>Image</th>
+                            <th>Demo</th>
+                            <th>Date</th>
+                            <th>Category</th>
+                            <th>Description</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-project> 
+                        <tr>
+                            <td>
+                                <p-button styleClass="p-button-rounded me-1 p-button-success p-button-text p-button-raised" icon="pi pi-pencil" (click)="showDialogEdit('right',project)"
+                                    ></p-button>
+                                <p-button styleClass="p-button-rounded me-1 p-button-danger p-button-text p-button-raised" icon="pi pi-trash" (click)="deleteproject(project)"
+                                    ></p-button>
+                                <p-button styleClass="p-button-rounded p-button-info p-button-text p-button-raised" icon="pi pi-eye" (click)="viewData(project)"
+                                    ></p-button>
+                            </td>
+                            <td>{{ project.name }}</td>
+                            <td>
+                                <p-image [src]="project.imageUrl" alt="{{project.name}}" width="50"
+                                    [preview]="true"></p-image>
+                            </td>
+                            <td>
+                                <a [href]="project.demo" target="_blank">
+                                    <i class="bi bi-box-arrow-up-right"></i>
+                                </a>
+                            </td>
+                            <td>{{ project.date | date: 'short' }}</td>
+                            <td>{{ project.category }}</td>
+                            <td>{{project.desc}}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="box scrollbar theme-light" style="height: 91vh;">
+                <div *ngIf="selectedprojectForView">
+                    <h4 class="mt-4 ms-2 res-m-0">View Details</h4>
+                    <div class="card view-card ms-2 me-2 mt-4">
+                        <div class="card-body">
+                            <div class="card-text">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p><strong>Category:</strong> {{ selectedprojectForView.category }}</p>
+                                        <p><strong>Description:</strong> {{ selectedprojectForView.desc }}</p>
+                                        <p><strong>Date:</strong> {{ selectedprojectForView.date | date: 'short' }}</p>
+                                        <div class="d-flex justify-content-start mt-3">
+                                            <button pButton icon="pi pi-pencil" class="bg-dark"
+                                                (click)="showDialogEdit('right', selectedprojectForView)">
+                                            </button>
+                                            <button pButton icon="pi pi-trash" class="bg-dark ms-1 res-m-0"
+                                                (click)="deleteproject(selectedprojectForView)">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p-image [src]="selectedprojectForView.imageUrl"
+                                            alt="{{selectedprojectForView.name}}" height="300" width="300" [preview]="true"></p-image>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="!selectedprojectForView" class="d-flex justify-content-center align-items-center"
+                    style="height: 80vh;">
+                    <p class="sub-head blink fw-bold">Select a Data to view its details.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="full-vh">
+    <p-dialog header="Edit Data" [(visible)]="visibleEdit" [position]="position" [style]="{ height: '100vh' }">
+        <form [formGroup]="projectFrom" (ngSubmit)="submitProject()">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="field">
+                        <label for="" class="d-block">Name</label>
+                        <input type="text" class="w-100" pInputText formControlName="name">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="field"> 
+                        <label for="" class="d-block">Category</label>
+                        <p-dropdown [options]="categories" formControlName="category" (onChange)="onCategoryChange()"
+                            placeholder="Select a category" class="w-100" optionLabel="label" optionValue="value">
+                        </p-dropdown>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-6">
+                    <div class="field">
+                        <label for="" class="d-block">Demo Link</label>
+                        <input class="w-100" type="text" pInputText formControlName="demo">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div>
+                        <label for="file">Select Image:</label>
+                        <input id="file" class="form-control" type="file" (change)="onFileSelected($event)" />
+                    </div>
+                </div>
+            </div>
+            <div class="field mt-2">
+                <label for="" class="d-block">Description</label>
+                <textarea type="text" rows="5" class="w-100" pInputText formControlName="desc"></textarea>
+            </div>
+
+            <button pButton label="Update" class="mt-1" type="submit" [disabled]="projectFrom.invalid"></button>
+        </form>
+    </p-dialog>
+</div>
+
+<!-- Add project Dialog -->
+<div class="full-vh">
+    <p-dialog header="Add Data" [(visible)]="visibleAdd" [position]="position" [style]="{ height: '100vh' }">
+        <form [formGroup]="projectFrom" (ngSubmit)="submitProject()">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="field">
+                        <label for="" class="d-block">Name</label>
+                        <input class="w-100" type="text" pInputText formControlName="name">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="field">
+                        <label for="" class="d-block">Category</label>
+                        <p-dropdown class="w-100" [options]="categories" formControlName="category"
+                            (onChange)="onCategoryChange()" placeholder="Select a category" optionLabel="label"
+                            optionValue="value">
+                        </p-dropdown>
+                    </div>
+                </div>
+            </div> 
+            <div class="row mt-2">
+                <div class="col-md-6">
+                    <div class="field">
+                        <label for="" class="d-block">Demo Link</label>
+                        <input class="w-100" type="text" pInputText formControlName="demo">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div>
+                        <label for="file">Select Image:</label>
+                        <input id="file" class="form-control mt-2" type="file" (change)="onFileSelected($event)" />
+                    </div>
+                </div>
+            </div>
+            <div class="field mt-2">
+                <label for="" class="d-block">Description</label>
+                <textarea type="text" rows="5" class="w-100" pInputText formControlName="desc"></textarea>
+            </div>
+
+            <button pButton label="Submit" type="submit" [disabled]="projectFrom.invalid"></button>
+        </form>
+    </p-dialog>
+</div>
+
+<div *ngIf="isLoading">
+    <app-loader></app-loader>
+</div>

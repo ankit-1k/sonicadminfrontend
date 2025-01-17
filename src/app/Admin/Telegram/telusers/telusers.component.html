@@ -1,0 +1,52 @@
+<div class="container-fluid">
+    <div class="row mt-3">
+        <div class="col-md-6 scrollbar" style="height: 85vh;overflow-x: auto;">
+            <div class="d-flex justify-content-end">
+                <p-dropdown [options]="items" [(ngModel)]="selectedFilter" placeholder="Select an Option"
+                    optionLabel="label" optionValue="value" (onChange)="applyFilter()">
+                </p-dropdown>
+            </div>
+            <p-table [value]="filteredUsers" responsiveLayout="scroll" [paginator]="true" [rows]="5"
+                [rowsPerPageOptions]="[5, 10, 15]">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Action</th>
+                        <th>Name</th>
+                        <th>User Name</th>
+                        <th>Date</th>
+                        <th>Ac No</th>
+                        <th>Co Name</th>
+                        <th>Paid</th>
+                        <th>Status</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-user>
+                    <tr>
+                        <td>
+                            <button pButton icon="pi pi-eye" class="bg-success"
+                                (click)="viewUserDetails(user)"></button>
+                        </td>
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.userName }}</td>
+                        <td>{{ user.date | date: 'shortDate' }}</td>
+                        <td>{{ user.accNo }}</td>
+                        <td>{{ user.coName }}</td>
+                        <td>{{ user.amount | currency: 'INR': 'symbol':'1.2-2' }}</td>
+                        <td>{{ user.status }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+        <div class="col-md-6">
+            <div *ngIf="selectedUser" class="user-details">
+                <!-- <h3>User Details</h3> -->
+                <p><strong>Name:</strong> {{ selectedUser.name }}</p>
+                <p><strong>User Name:</strong> {{ selectedUser.userName }}</p>
+                <p><strong>Total Amount:</strong> {{ selectedUser.amount | currency: 'INR': 'symbol':'1.2-2' }}</p>
+                <p [ngClass]="getLevelColor(selectedUser.amount)">
+                    <strong>Level:</strong> {{ getLevel(selectedUser.amount) }}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

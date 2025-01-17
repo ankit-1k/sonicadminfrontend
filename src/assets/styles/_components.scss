@@ -1,0 +1,304 @@
+// common.css
+.f-c {
+    @include center(center, center);
+}
+
+.p-dropdown {
+    width: 100%;
+}
+
+.theme-light {
+    background-color: $theme_light;
+}
+
+.text-theme {
+    color: $theme_color;
+}
+
+.p-datatable>.p-datatable-wrapper {
+    @extend .scrollbar;
+}
+
+.p-dialog .p-dialog-content:last-of-type {
+    @extend .scrollbar;
+}
+
+.p-sidebar .p-sidebar-header+.p-sidebar-content {
+    @extend .scrollbar;
+}
+
+.p-datepicker:not(.p-datepicker-inline) .p-datepicker-header,
+.p-datepicker .p-datepicker-header .p-datepicker-title .p-datepicker-month,
+.p-datepicker .p-datepicker-header .p-datepicker-next,
+.p-datepicker .p-datepicker-header .p-datepicker-prev {
+    background: $theme_color !important;
+    color: white !important;
+}
+
+.p-datepicker .p-datepicker-header .p-datepicker-title .p-datepicker-year,
+.p-datepicker .p-datepicker-header .p-datepicker-title .p-datepicker-month {
+    color: white !important;
+}
+
+.p-overlaypanel {
+    width: 15rem;
+    .p-overlaypanel-content {
+        padding: 0.1rem !important;
+    }
+}
+
+.blink {
+    animation: fade-in-out 1.5s infinite;
+}
+
+.head {
+    font-weight: bold;
+    text-shadow: 2px 2px 2px black;
+
+    &::before {
+        content: "-";
+    }
+
+    &::after {
+        content: '-';
+    }
+}
+
+.sub-head {
+    font-size: 23px;
+}
+
+.text-sm {
+    font-size: 12px;
+}
+
+.view-card {
+    background-color: rgba(2, 2, 41, 0.1);
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.p-calendar,
+.p-inputnumber {
+    width: 100%;
+}
+
+.p-calendar input {
+    width: 100%;
+}
+
+p-table {
+
+    th,
+    td {
+        text-wrap: nowrap;
+    }
+}
+
+@keyframes fade-in-out {
+    0% {
+        opacity: 0.1;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.1;
+    }
+}
+
+@media (max-width:767px) {
+    .res-p-0 {
+        padding: 0px;
+    }
+
+    .res-m-0 {
+        margin: 0px;
+    }
+}
+
+@media (max-width:500px) {
+    .login-card {
+        width: 100% !important;
+    }
+}
+
+@for $i from 6 through 100 {
+    .mt-#{$i} {
+        margin-top: 10px * $i;
+    }
+
+    .mb-#{$i} {
+        margin-bottom: 10px * $i;
+    }
+
+    .ms-#{$i} {
+        margin-left: 10px * $i;
+    }
+
+    .me-#{$i} {
+        margin-right: 10px * $i;
+    }
+
+    .pt-#{$i} {
+        padding-top: 10px * $i;
+    }
+
+    .pb-#{$i} {
+        padding-bottom: 10px * $i;
+    }
+
+    .ps-#{$i} {
+        padding-left: 10px * $i;
+    }
+
+    .pe-#{$i} {
+        padding-right: 10px * $i;
+    }
+
+    .vh-#{$i} {
+        height: 1px * $i;
+    }
+}
+
+//   global scrollbar
+.scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+    background: $black;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+    background: $gray_md;
+    border-radius: 4px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+    background: $gray_md;
+}
+
+/* For Firefox */
+.scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: $gray_sm transparent;
+}
+
+// header
+.p-sidebar .p-sidebar-content {
+    padding: 0px !important;
+}
+
+.sedebar-acc {
+    .p-accordion .p-accordion-content {
+        padding: 0px;
+    }
+
+    .p-accordion .p-accordion-content {
+        padding-left: 2rem;
+        padding-bottom: 5px;
+
+        a {
+            color: $theme_color;
+            text-decoration: none;
+            display: block;
+
+            &:hover {
+                color: $deep_theme;
+            }
+        }
+    }
+}
+
+//   global scrollbar
+.scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+    background: $black;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+    background: $gray_sm;
+    border-radius: 4px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+    background: $gray_md;
+}
+
+/* For Firefox */
+.scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: $theme_light transparent;
+}
+
+.full-vh {
+    .p-dialog {
+        max-height: 100%;
+        height: 100%;
+        width: 50vw;
+
+        @media (max-width:767px) {
+            width: 100vh;
+        }
+    }
+
+    .p-dialog-top .p-dialog,
+    .p-dialog-bottom .p-dialog,
+    .p-dialog-left .p-dialog,
+    .p-dialog-right .p-dialog,
+    .p-dialog-top-left .p-dialog,
+    .p-dialog-top-right .p-dialog,
+    .p-dialog-bottom-left .p-dialog,
+    .p-dialog-bottom-right .p-dialog {
+        margin-right: 0px;
+    }
+}
+
+// blog
+.box {
+    overflow-y: auto;
+}
+
+.search-box {
+    border: 1px solid $theme_color;
+    display: flex;
+
+    input {
+        border: none;
+
+        &::placeholder {
+            color: $theme_color;
+        }
+    }
+
+    button {
+        border: none;
+        border-radius: 0px;
+    }
+
+    .p-inputtext:enabled:focus {
+        box-shadow: none;
+    }
+}
+
+.service-card {
+    border-radius: 0px;
+    box-shadow: 2px 2px 2px -2px $theme_color;
+    transition: 0.5s;
+    cursor: pointer;
+    height: 165px;
+
+    &:hover {
+        background-color: $theme_color;
+        color: white;
+        transform: translate(3px 3px);
+    }
+}

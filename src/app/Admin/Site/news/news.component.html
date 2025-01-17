@@ -1,0 +1,182 @@
+<div class="container-fluid" *ngIf="!isLoading">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box scrollbar" style="height: 91vh;">
+                <div class="d-flex justify-content-between mt-3 mb-2 me-1">
+                    <h4 class="mt-1 ms-2 res-m-0">View Data <i class="bi bi-bootstrap-fill"></i></h4>
+                    <p-dropdown class="p-0 m-0" [options]="categories" [(ngModel)]="selectedCategory"
+                        (onChange)="onCategoryChange()" placeholder="Select a category" optionLabel="label"
+                        optionValue="value">
+                    </p-dropdown>
+                </div>
+                <p-table responsiveLayout="scroll" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5, 10, 15]"
+                    [value]="filterednews">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th><button pButton (click)="showDialogAdd('right')" label="Add" icon="pi pi-plus"
+                                    class="w-100"></button></th>
+                            <th>Heading</th>
+                            <th>Date</th>
+                            <th>Image</th>
+                            <th>Category</th>
+                            <th>Description</th>
+                            <th>Link</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-news>
+                        <tr>
+                            <td>
+                                <p-button styleClass="p-button-rounded me-1 p-button-info p-button-text p-button-raised"
+                                    icon="pi pi-pencil" (click)="showDialogEdit('right',news)"></p-button>
+                                <p-button
+                                    styleClass="p-button-rounded me-1 p-button-danger p-button-text p-button-raised"
+                                    icon="pi pi-trash" (click)="deletenews(news)"></p-button>
+                                <p-button styleClass="p-button-rounded p-button-success p-button-text p-button-raised"
+                                    icon="pi pi-eye" (click)="viewData(news)"></p-button>
+                            </td>
+                            <td>{{ news.heading }}</td>
+                            <td>{{ news.date | date: 'short' }}</td>
+                            <td>
+                                <p-image [src]="news.img" alt="{{news.name}}" width="50" [preview]="true"></p-image>
+                            </td>
+                            <td>{{ news.category }}</td>
+                            <td>{{news.desc}}</td>
+                            <td>
+                                <a [href]="news.link" target="_blank">
+                                    <i class="bi bi-box-arrow-up-right"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="box scrollbar theme-light" style="height: 91vh;">
+                <div *ngIf="selectednewsForView">
+                    <h4 class="mt-4 ms-2 res-m-0">View Details</h4>
+                    <div class="card view-card ms-2 me-2 mt-4">
+                        <div class="card-body">
+                            <div class="card-text">
+                                <p><strong>Heading:</strong> {{ selectednewsForView.heading }}</p>
+                                <p><strong>Image:</strong> {{ selectednewsForView.img }}</p>
+                                <p><strong>Category:</strong> {{ selectednewsForView.category }}</p>
+                                <p><strong>Description:</strong> {{ selectednewsForView.desc }}</p>
+                                <p><strong>Date:</strong> {{ selectednewsForView.date | date: 'short' }}</p>
+                                <div class="d-flex justify-content-end">
+                                    <button pButton icon="pi pi-pencil" class="bg-dark"
+                                        (click)="showDialogEdit('right', selectednewsForView)">
+                                    </button>
+                                    <button pButton icon="pi pi-trash" class="bg-dark ms-1 res-m-0"
+                                        (click)="deletenews(selectednewsForView)">
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="!selectednewsForView" class="d-flex justify-content-center align-items-center"
+                    style="height: 80vh;">
+                    <p class="sub-head blink fw-bold">Select a Data to view its details.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="full-vh">
+    <p-dialog header="Edit Data" [(visible)]="visibleEdit" [position]="position" [style]="{ height: '100vh' }">
+        <form [formGroup]="newsFrom" (ngSubmit)="submitnews()">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="field">
+                        <label for="" class="d-block">Heading</label>
+                        <input type="text" class="w-100" pInputText formControlName="heading">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="field">
+                        <label for="" class="d-block">Category</label>
+                        <p-dropdown [options]="categories" formControlName="category" (onChange)="onCategoryChange()"
+                            placeholder="Select a category" class="w-100" optionLabel="label" optionValue="value">
+                        </p-dropdown>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="field">
+                        <label for="" class="d-block">Image</label>
+                        <input type="text" class="w-100" pInputText formControlName="img">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="field">
+                        <div class="field">
+                            <label for="" class="d-block">Link</label>
+                            <input type="text" class="w-100" pInputText formControlName="link">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="field mt-2">
+                <label for="" class="d-block">Description</label>
+                <textarea type="text" rows="5" class="w-100" pInputText formControlName="desc"></textarea>
+            </div>
+
+            <button pButton label="Update" class="mt-1" type="submit" [disabled]="newsFrom.invalid"></button>
+        </form>
+    </p-dialog>
+</div>
+
+<!-- Add news Dialog -->
+<div class="full-vh">
+    <p-dialog header="Add Data" [(visible)]="visibleAdd" [position]="position" [style]="{ height: '100vh' }">
+        <form [formGroup]="newsFrom" (ngSubmit)="submitnews()">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="field">
+                        <label for="" class="d-block">Heading</label>
+                        <input class="w-100" type="text" pInputText formControlName="heading">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="field">
+                        <label for="" class="d-block">Category</label>
+                        <p-dropdown class="w-100" [options]="categories" formControlName="category"
+                            (onChange)="onCategoryChange()" placeholder="Select a category" optionLabel="label"
+                            optionValue="value">
+                        </p-dropdown>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="field">
+                        <label for="" class="d-block">Image</label>
+                        <input type="text" class="w-100" pInputText formControlName="img">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="field">
+                        <div class="field">
+                            <label for="" class="d-block">Link</label>
+                            <input type="text" class="w-100" pInputText formControlName="link">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="field mt-2">
+                <label for="" class="d-block">Description</label>
+                <textarea type="text" rows="5" class="w-100" pInputText formControlName="desc"></textarea>
+            </div>
+
+            <button pButton label="Submit" type="submit" [disabled]="newsFrom.invalid"></button>
+        </form>
+    </p-dialog>
+</div>
+
+<!-- loader -->
+<div *ngIf="isLoading">
+    <app-loader></app-loader>
+</div>

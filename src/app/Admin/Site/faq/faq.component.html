@@ -1,0 +1,139 @@
+<div class="container-fluid" *ngIf="!isLoading">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box scrollbar" style="height: 91vh;">
+                <div class="d-flex justify-content-between mt-3 mb-2 me-1">
+                    <h4 class="mt-1 ms-2 res-m-0">View Data <i class="bi bi-bootstrap-fill"></i></h4>
+                    <p-dropdown class="p-0 m-0" [options]="categories" [(ngModel)]="selectedCategory"
+                        (onChange)="onCategoryChange()" placeholder="Select a category" optionLabel="label"
+                        optionValue="value">
+                    </p-dropdown>
+                </div>
+                <p-table responsiveLayout="scroll" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5, 10, 15]"
+                    [value]="filteredfaqs">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th><button pButton (click)="showDialogAdd('right')" label="Add" icon="pi pi-plus"
+                                    class="w-100"></button></th>
+                            <th>Category</th>
+                            <th>Question</th>
+                            <th>Answer</th>
+                            <th>Date</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-faq>
+                        <tr>
+                            <td>
+                                <p-button styleClass="p-button-rounded me-1 p-button-info p-button-text p-button-raised"
+                                    icon="pi pi-pencil" (click)="showDialogEdit('right',faq)"></p-button>
+                                <p-button
+                                    styleClass="p-button-rounded me-1 p-button-danger p-button-text p-button-raised"
+                                    icon="pi pi-trash" (click)="deletefaq(faq)"></p-button>
+                                <p-button styleClass="p-button-rounded p-button-success p-button-text p-button-raised"
+                                    icon="pi pi-eye" (click)="viewData(faq)"></p-button>
+                            </td>
+                            <td>{{ faq.category }}</td>
+                            <td>{{ faq.question }}</td>
+                            <td>{{faq.desc}}</td>
+                            <td>{{ faq.date | date: 'short' }}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="box scrollbar theme-light" style="height: 91vh;">
+                <div *ngIf="selectedfaqForView">
+                    <h4 class="mt-4 ms-2 res-m-0">View Details</h4>
+                    <div class="card view-card ms-2 me-2 mt-4">
+                        <div class="card-body">
+                            <div class="card-text">
+                                <p><strong>Category:</strong> {{ selectedfaqForView.category }}</p>
+                                <p><strong>Question:</strong> {{ selectedfaqForView.question }}</p>
+                                <p><strong>Answer:</strong> {{ selectedfaqForView.desc }}</p>
+                                <p><strong>Date:</strong> {{ selectedfaqForView.date | date: 'short' }}</p>
+                                <div class="d-flex justify-content-end">
+                                    <button pButton icon="pi pi-pencil" class="bg-dark"
+                                        (click)="showDialogEdit('right', selectedfaqForView)">
+                                    </button>
+                                    <button pButton icon="pi pi-trash" class="bg-dark ms-1 res-m-0"
+                                        (click)="deletefaq(selectedfaqForView)">
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="!selectedfaqForView" class="d-flex justify-content-center align-items-center"
+                    style="height: 80vh;">
+                    <p class="sub-head blink fw-bold">Select a Data to view its details.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="full-vh">
+    <p-dialog header="Edit Data" [(visible)]="visibleEdit" [position]="position" [style]="{ height: '100vh' }">
+        <form [formGroup]="faqFrom" (ngSubmit)="submitfaq()">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="field">
+                        <label for="" class="d-block">Question</label>
+                        <input type="text" class="w-100" pInputText formControlName="question">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="field">
+                        <label for="" class="d-block">Category</label>
+                        <p-dropdown [options]="categories" formControlName="category" (onChange)="onCategoryChange()"
+                            placeholder="Select a category" class="w-100" optionLabel="label" optionValue="value">
+                        </p-dropdown>
+                    </div>
+                </div>
+            </div>
+            <div class="field mt-2">
+                <label for="" class="d-block">Answer</label>
+                <textarea type="text" rows="5" class="w-100" pInputText formControlName="desc"></textarea>
+            </div>
+
+            <button pButton label="Update" class="mt-1" type="submit" [disabled]="faqFrom.invalid"></button>
+        </form>
+    </p-dialog>
+</div>
+
+<!-- Add faq Dialog -->
+<div class="full-vh">
+    <p-dialog header="Add Data" [(visible)]="visibleAdd" [position]="position" [style]="{ height: '100vh' }">
+        <form [formGroup]="faqFrom" (ngSubmit)="submitfaq()">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="field">
+                        <label for="" class="d-block">Question</label>
+                        <input class="w-100" type="text" pInputText formControlName="question">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="field">
+                        <label for="" class="d-block">Category</label>
+                        <p-dropdown class="w-100" [options]="categories" formControlName="category"
+                            (onChange)="onCategoryChange()" placeholder="Select a category" optionLabel="label"
+                            optionValue="value">
+                        </p-dropdown>
+                    </div>
+                </div>
+            </div>
+            <div class="field mt-2">
+                <label for="" class="d-block">Answer</label>
+                <textarea type="text" rows="5" class="w-100" pInputText formControlName="desc"></textarea>
+            </div>
+
+            <button pButton label="Submit" type="submit" [disabled]="faqFrom.invalid"></button>
+        </form>
+    </p-dialog>
+</div>
+
+<!-- loader -->
+<div *ngIf="isLoading">
+    <app-loader></app-loader>
+</div>

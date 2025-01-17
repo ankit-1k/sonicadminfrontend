@@ -1,0 +1,72 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box scrollbar" style="height: 91vh;">
+                <h4 class="fw-bold mt-2 mb-2 ms-2">All Users</h4>
+                <p-table [value]="allWebsites" responsiveLayout="scroll" [paginator]="true" [rows]="5"
+                    [rowsPerPageOptions]="[5, 10, 15]">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Action</th>
+                            <th>Site Name</th>
+                            <th>Origin URL</th>
+                            <th class="text-center">Access</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-website>
+                        <tr>
+                            <td>
+                                <p-button styleClass="p-button-rounded me-1 p-button-info p-button-text p-button-raised"
+                                    icon="pi pi-pencil" (click)="editWebsite(website)"></p-button>
+                                <p-button
+                                    styleClass="p-button-rounded me-1 p-button-danger p-button-text p-button-raised"
+                                    icon="pi pi-trash" (click)="deleteWebsite(website)"></p-button>
+                            </td>
+                            <td>{{website.name}}</td>
+                            <td>{{website.sitename}}</td>
+                            <td class="text-center" [ngClass]="website.access?'text-success':'text-danger'"><i
+                                    class="bi" [ngClass]="website.access? 'bi-person-walking':'bi-ban'"></i></td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div *ngIf="!editMode" class="box scrollbar theme-light" style="height: 91vh;">
+                <h4 class="fw-bold mt-2 mb-2 ms-2">Add Users</h4>
+                <form [formGroup]="originForm" (ngSubmit)="submitOrigin()" class="ps-2 pe-2 res-p-0">
+                    <div class="field mt-3">
+                        <label for="sitename" class="d-block">Site Name</label>
+                        <input type="text" id="name" pInputText formControlName="name" class="mt-2 w-100" />
+                    </div>
+                    <div class="field mt-2">
+                        <label for="sitename" class="d-block">Origin URL</label>
+                        <input type="text" id="sitename" pInputText formControlName="sitename" class="mt-2 w-100" />
+                    </div>
+                    <button pButton type="submit" class="mt-2" label="Publish" icon="pi pi-check"></button>
+                </form>
+            </div>
+            <div *ngIf="editMode" class="box scrollbar theme-light" style="height: 91vh;">
+                <h4 class="fw-bold mt-2 mb-2 ms-2">Edit Users</h4>
+                <form [formGroup]="editForm" (ngSubmit)="updateWebsite()" class="ps-2 pe-2 res-p-0">
+                    <div class="field mt-3">
+                        <label for="sitename" class="d-block">Site Name</label>
+                        <input type="text" id="name" pInputText formControlName="name" class="mt-2 w-100" />
+                    </div>
+                    <div class="field">
+                        <label for="editSitename" class="d-block">Origin URL</label>
+                        <input type="text" id="editSitename" pInputText formControlName="sitename" class="mt-2 w-100" />
+                    </div>
+                    <div class="field d-flex mt-3">
+                        <p-checkbox id="access" label="Access" [binary]="true" formControlName="access"></p-checkbox>
+                    </div>
+                    <div class="d-flex mt-3">
+                        <button pButton type="submit" label="Update" icon="pi pi-save"></button>
+                        <button pButton type="button" label="Cancel" icon="pi pi-times" (click)="cancelEdit()" class="ms-3"></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,18 @@
+<div class="container">
+    <div class="row mt-6">
+        <div class="col-md-4" *ngFor="let req of allReq">
+            <div class="card position-relative m-1">
+                <i class="pi pi-times position-absolute end-0 me-1 mt-1" (click)="deleteReq(req._id)"></i>
+                <div class="card-body">
+                    <div class="card-title">{{req.subject}}</div>
+                    <div class="card-text">
+                        {{req.message}}
+                    </div>
+                </div>
+                <div class="card-footer">
+                   By <span class="text-success">{{req.name}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

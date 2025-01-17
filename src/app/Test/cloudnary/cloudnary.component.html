@@ -1,0 +1,43 @@
+<div class="mt-10">
+  <div class="card flex justify-content-center">
+    <span class="p-float-label">
+      <textarea pInputTextarea id="username" [(ngModel)]="value" ></textarea>
+      <label htmlFor="username">Username</label> 
+    </span>
+  </div>
+</div>
+
+<!-- <form [formGroup]="uploadForm" (ngSubmit)="onUpload()">
+  <div>
+    <label for="name">Name:</label>
+    <input id="name" type="text" formControlName="name" />
+    <div *ngIf="uploadForm.get('name')?.invalid && uploadForm.get('name')?.touched">
+      Name is required.
+    </div>
+  </div>
+
+  <div>
+    <label for="description">Description:</label>
+    <textarea id="description" formControlName="description"></textarea>
+    <div *ngIf="uploadForm.get('description')?.invalid && uploadForm.get('description')?.touched">
+      Description is required.
+    </div>
+  </div>
+
+  <div>
+    <label for="file">Select Image:</label>
+    <input id="file" class="form-control" type="file" (change)="onFileSelected($event)" />
+    <div *ngIf="uploadForm.get('file')?.invalid && uploadForm.get('file')?.touched">
+      File is required.
+    </div>
+  </div>
+
+  <button type="submit" [disabled]="uploadForm.invalid">Upload</button>
+</form>
+
+<div *ngFor="let img of data">
+  <p>
+    <img [src]="img.url" alt="">
+    <button pButton label="delete" (click)="onDelete(img._id)"></button>
+  </p>
+</div> -->

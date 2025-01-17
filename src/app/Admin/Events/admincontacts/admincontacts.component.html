@@ -1,0 +1,54 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="box scrollbar" style="height: 91vh;">
+        <div class="d-flex justify-content-between mt-3 mb-2 me-1">
+          <h4 class="mt-1 ms-2 res-m-0">View Data <i class="bi bi-bootstrap-fill"></i></h4>
+        </div>
+        <p-table [value]="getAllContacts" responsiveLayout="scroll" [paginator]="true" [rows]="5"
+          [rowsPerPageOptions]="[5, 10, 15]">
+          <ng-template pTemplate="header">
+            <tr>
+              <td class="">Action</td>
+              <td class="text-start">Name</td>
+              <td>Email</td>
+              <td>Phone</td>
+              <td>Subject</td>
+              <td>Message</td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-req>
+            <tr>
+              <td class="p-0">
+                <div class="d-flex">
+                  <button pButton (click)="deleteContact(req._id)" icon="pi pi-trash" class="bg-danger"></button>
+                  <button pButton (click)="viewContact(req)" icon="pi pi-eye" class="bg-primary ms-1"></button>
+                </div>
+              </td>
+              <td class="p-0">{{req.name}}</td>
+              <td>{{req.email}}</td>
+              <td>{{req.phone}}</td>
+              <td>{{req.subject}}</td>
+              <td>{{req.message}}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+
+    <div class="col-md-6 position-relative theme-light" style="height: 91vh;">
+      <div class="box scrollbar ">
+        <div *ngIf="selectedContact" class="mt-5">
+          <h4 class="text-theme">{{ selectedContact.name }}</h4>
+          <p><strong>Email:</strong> {{ selectedContact.email }}</p>
+          <p><strong>Phone:</strong> {{ selectedContact.phone }}</p>
+          <p><strong>Subject:</strong> {{ selectedContact.subject }}</p>
+          <p><strong>Message:</strong> {{ selectedContact.message }}</p>
+        </div>
+        <div *ngIf="!selectedContact" class="d-flex justify-content-center align-items-center " style="height: 80vh;">
+          <p class="fw-bold lead">Select a contact to view details.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

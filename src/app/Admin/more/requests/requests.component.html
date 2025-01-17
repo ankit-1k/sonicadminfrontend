@@ -1,0 +1,20 @@
+<div class="d-flex justify-content-center align-items-center" style="height: 85vh;">
+    <div class="card p-3" style="width: 30rem;">
+        <h3 class="head text-theme text-center">Request</h3>
+        <form [formGroup]="reqForm" (ngSubmit)="submitReq()">
+            <div class="field">
+                <label for="" class="d-block">Name</label>
+                <input class="w-100" type="text" pInputText formControlName="name">
+            </div>
+            <div class="field mt-2">
+                <label for="" class="d-block">Subject</label>
+                <input class="w-100" type="text" pInputText formControlName="subject">
+            </div>
+            <div class="field mt-2">
+                <label for="" class="d-block">Message</label>
+                <textarea class="w-100" rows="4" type="text" pInputTextarea formControlName="message"></textarea>
+            </div>
+            <button class="w-100 mt-2" pButton label="Send" icon="pi pi-send"></button>
+        </form>
+    </div>
+</div>

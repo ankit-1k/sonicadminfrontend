@@ -1,0 +1,27 @@
+#carouselExampleCaptions {
+    max-height: 400px; 
+    overflow: hidden;
+  
+    .carousel-inner {
+      .carousel-item {
+        img {
+          height: 400px;
+          width: 100%; 
+          background-size: cover;
+          background-position: center center;
+        }
+      }
+    }
+  
+    .carousel-caption {
+      bottom: 20px;
+      font-size: 14px; 
+    }
+  
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+      height: 30px;
+      width: 30px;
+    }
+  }
+  

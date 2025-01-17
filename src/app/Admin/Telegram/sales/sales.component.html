@@ -1,0 +1,161 @@
+<div class="container-fluid" *ngIf="!isLoading">
+    <div class="row mt-3">
+        <div class="col-md-6 scrollbar" style="height: 85vh;overflow-x: auto;">
+            <p-table [value]="users" responsiveLayout="scroll" [paginator]="true" [rows]="5"
+                [rowsPerPageOptions]="[5, 10, 15]">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>
+                            Action
+                            <button pButton (click)="showDialogAdd('right')" icon="pi pi-plus"
+                                class="rounded-pill p-0"></button>
+                        </th>
+                        <th>Name</th>
+                        <th>User Name</th>
+                        <th>Date</th>
+                        <th>Ac No</th>
+                        <th>Co Name</th>
+                        <th>Paid</th>
+                        <th>Status</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-user>
+                    <tr>
+                        <td>
+                            <button pButton icon="pi pi-pencil" (click)="editSales(user,'right')"
+                                class="bg-info"></button>
+                            <button pButton icon="pi pi-trash" (click)="deleteSales(user._id)"
+                                class="bg-danger ms-1 res-m-0"></button>
+                        </td>
+                        <td>{{user.name}}</td>
+                        <td>{{user.userName}}</td>
+                        <td>{{user.date | date: 'shortDate' }}</td>
+                        <td>{{user.accNo}}</td>
+                        <td>{{user.coName}}</td>
+                        <td>{{user.amount | currency: 'INR': 'symbol' : '1.2-2' }}</td>
+                        <td>{{user.status}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+        <div class="col-md-6 theme-light scrollbar position-relative" style="height: 88vh;">
+            <div class="d-flex justify-content-between mt-3">
+                <h4>TS</h4>
+            </div>
+            <div>
+                <p *ngIf="mnt.length === 0">No data available for the current year.</p>
+                <p-chart *ngIf="mnt.length > 0" [type]="'bar'" [data]="chartData" [options]="chartOptions"></p-chart>
+            </div>
+            <p label="View" class="btn btn-link position-absolute bottom-0" icon="pi pi-eye" (click)="showDialogData('right')">View rv & search user</p>
+        </div>
+    </div>
+</div>
+
+<div class="full-vh">
+    <p-dialog header="View Data" [(visible)]="visibleData" [position]="position" [style]="{ height: '100vh' }">
+        <div class="container-fluid">
+            <div *ngIf="mnt.length > 0">
+                <div class="search-box">
+                    <input type="text" [(ngModel)]="user" (keydown.enter)="searchUser()" placeholder="Enter User Name" class="w-100" pInputText>
+                    <button pButton icon="pi pi-search" (click)="searchUser()"></button>
+                </div>
+                <p-table *ngIf="searchedUsers.length>0" [value]="searchedUsers" responsiveLayout="scroll"
+                    [paginator]="true" [rows]="2" [rowsPerPageOptions]="[2, 4, 6]">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Name</th>
+                            <th>User Name</th>
+                            <th>Date</th>
+                            <th>Ac No</th>
+                            <th>Co Name</th>
+                            <th>Paid</th>
+                            <th>Status</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-user>
+                        <tr>
+                            <td>{{user.name}}</td>
+                            <td>{{user.userName}}</td>
+                            <td>{{user.date | date: 'shortDate' }}</td>
+                            <td>{{user.accNo}}</td>
+                            <td>{{user.coName}}</td>
+                            <td>{{user.amount | currency: 'INR': 'symbol' : '1.2-2' }}</td>
+                            <td>{{user.status}}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+                <div>
+                    <h3>Monthly Totals</h3>
+                    <ul>
+                        <li *ngFor="let item of mnt">
+                            {{ item.month }}: {{ item.totalAmount | currency: 'INR': 'symbol' : '1.2-2' }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-3">
+                <strong>Total Sales Quantity for {{ selectedYear }}: </strong>
+                <span>{{ totalSalesQuantity | currency: 'INR': 'symbol' : '1.2-2' }}</span>
+            </div>
+        </div>
+    </p-dialog>
+</div>
+
+<div class="full-vh">
+    <p-dialog header="{{ editingSalesId ? 'Edit User' : 'Add User' }}" [(visible)]="visibleEdit" [position]="position"
+        [style]="{ height: '100vh' }">
+        <div class="container-fluid">
+            <form class="row" [formGroup]="salesForm" (ngSubmit)="submitSales()">
+                <div class="col-md-6 mt-3">
+                    <div class="field">
+                        <label for="date" class="d-block">Date</label>
+                        <p-calendar class="w-100" formControlName="date"></p-calendar>
+                    </div>
+                </div>
+                <div class="col-md-6 mt-3">
+                    <div class="field">
+                        <label for="name" class="d-block">Name</label>
+                        <input type="text" class="w-100" pInputText formControlName="name">
+                    </div>
+                </div>
+                <div class="col-md-6 mt-3">
+                    <div class="field">
+                        <label for="userName" class="d-block">User Name</label>
+                        <input type="text" class="w-100" pInputText formControlName="userName">
+                    </div>
+                </div>
+                <div class="col-md-6 mt-3">
+                    <div class="field">
+                        <label for="accNo" class="d-block">Acc No.</label>
+                        <p-inputNumber class="w-100" formControlName="accNo"></p-inputNumber>
+                    </div>
+                </div>
+                <div class="col-md-6 mt-3">
+                    <div class="field">
+                        <label for="coName" class="d-block">Co Name</label>
+                        <input type="text" class="w-100" pInputText formControlName="coName">
+                    </div>
+                </div>
+                <div class="col-md-6 mt-3">
+                    <div class="field">
+                        <label for="amount" class="d-block">Amount</label>
+                        <p-inputNumber class="w-100" formControlName="amount"></p-inputNumber>
+                    </div>
+                </div>
+                <div class="col-md-6 mt-3">
+                    <label for="status" class="d-block">Status</label>
+                    <p-dropdown [options]="items" formControlName="status" placeholder="Select an Option"
+                        optionLabel="label" optionValue="value"></p-dropdown>
+                </div>
+                <div class="col-md-6 mt-3">
+                    <button class="mt-4 w-100" pButton label="{{ editingSalesId ? 'Update' : 'Add' }}" icon="pi pi-plus"
+                        type="submit"></button>
+                </div>
+            </form>
+        </div>
+    </p-dialog>
+</div>
+
+<div *ngIf="isLoading">
+    <app-loader></app-loader>
+</div>

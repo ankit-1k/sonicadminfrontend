@@ -1,0 +1,199 @@
+<div class="container-fluid" *ngIf="!isLoading">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box scrollbar" style="height: 91vh;">
+                <div class="d-flex justify-content-between mt-3 mb-2 me-1">
+                    <h4 class="mt-1 ms-2 res-m-0">View Data <i class="bi bi-bootstrap-fill"></i></h4>
+                    <p-dropdown class="p-0 m-0" [options]="categories" [(ngModel)]="selectedCategory"
+                        (onChange)="onCategoryChange()" placeholder="Select a category" optionLabel="label"
+                        optionValue="value">
+                    </p-dropdown>
+                </div>
+                <p-table responsiveLayout="scroll" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5, 10, 15]"
+                    [value]="filteredheros">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th><button pButton (click)="showDialogAdd('right')" label="Add" icon="pi pi-plus"
+                                    class="w-100"></button></th>
+                            <th>Title</th>
+                            <th>Image</th>
+                            <th>Date</th>
+                            <th>Category</th>
+                            <th>Description</th>
+                            <th>Text 1</th>
+                            <th>Text 2</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-hero>
+                        <tr>
+                            <td>
+                                <p-button styleClass="p-button-rounded me-1 p-button-info p-button-text p-button-raised"
+                                    icon="pi pi-pencil" (click)="showDialogEdit('right',hero)"></p-button>
+                                <p-button
+                                    styleClass="p-button-rounded me-1 p-button-danger p-button-text p-button-raised"
+                                    icon="pi pi-trash" (click)="deletehero(hero)"></p-button>
+                                <p-button styleClass="p-button-rounded p-button-success p-button-text p-button-raised"
+                                    icon="pi pi-eye" (click)="viewData(hero)"></p-button>
+                            </td>
+                            <td>{{ hero.title }}</td>
+                            <td>
+                                <p-image [src]="hero.imageUrl" alt="{{hero.name}}" width="50"
+                                    [preview]="true"></p-image>
+                            </td>
+                            <td>{{ hero.date | date: 'short' }}</td>
+                            <td>{{ hero.category }}</td>
+                            <td>{{hero.desc}}</td>
+                            <td>{{hero.text1}}</td>
+                            <td>{{hero.text2}}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="box scrollbar theme-light" style="height: 91vh;">
+                <div *ngIf="selectedheroForView">
+                    <h4 class="mt-4 ms-2 res-m-0">View Details</h4>
+                    <div class="card view-card ms-2 me-2 mt-4">
+                        <div class="card-body">
+                            <div class="card-text scrollbar" style="max-height: 400px; overflow-y: auto;">
+                                <p><strong>Title:</strong> {{ selectedheroForView.title }}</p>
+                                <p>
+                                    <strong>Image:</strong>
+                                    <p-image [src]="selectedheroForView.imageUrl" alt="{{selectedheroForView.title}}"
+                                        width="50" [preview]="true"></p-image>
+                                </p>
+                                <p><strong>Category:</strong> {{ selectedheroForView.category }}</p>
+                                <p><strong>Description:</strong> {{ selectedheroForView.desc }}</p>
+                                <p><strong>Date:</strong> {{ selectedheroForView.date | date: 'short' }}</p>
+                                <p><strong>Text 1:</strong> {{ selectedheroForView.text1 }}</p>
+                                <p><strong>Text 2:</strong> {{ selectedheroForView.text2 }}</p>
+                                <div class="d-flex justify-content-end">
+                                    <button pButton icon="pi pi-pencil" class="bg-dark"
+                                        (click)="showDialogEdit('right', selectedheroForView)">
+                                    </button>
+                                    <button pButton icon="pi pi-trash" class="bg-dark ms-1 res-m-0"
+                                        (click)="deletehero(selectedheroForView)">
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="!selectedheroForView" class="d-flex justify-content-center align-items-center"
+                    style="height: 80vh;">
+                    <p class="sub-head blink fw-bold">Select a Data to view its details.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="full-vh">
+    <p-dialog header="Edit Data" [(visible)]="visibleEdit" [position]="position" [style]="{ height: '100vh' }">
+        <form [formGroup]="heroFrom" (ngSubmit)="submitHero()">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="field">
+                        <label for="" class="d-block">Category</label>
+                        <p-dropdown [options]="categories" formControlName="category" (onChange)="onCategoryChange()"
+                            placeholder="Select a category" class="w-100" optionLabel="label" optionValue="value">
+                        </p-dropdown>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="field">
+                        <label for="" class="d-block">Title</label>
+                        <input type="text" class="w-100" pInputText formControlName="title">
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-6">
+                    <div class="field">
+                        <label for="" class="d-block">Text1</label>
+                        <input class="w-100" type="text" pInputText formControlName="text1">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="field">
+                        <label for="" class="d-block">Text2</label>
+                        <input class="w-100" type="text" pInputText formControlName="text2">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div>
+                        <label for="file">Select Image:</label>
+                        <input id="file" class="form-control" type="file" (change)="onFileSelected($event)" />
+                    </div>
+                </div>
+            </div>
+            <div class="field mt-2">
+                <label for="" class="d-block">Description</label>
+                <textarea type="text" rows="5" class="w-100" pInputText formControlName="desc"></textarea>
+            </div>
+
+            <button pButton label="Update" class="mt-1" type="submit" [disabled]="heroFrom.invalid"></button>
+        </form>
+    </p-dialog>
+</div>
+
+<!-- Add hero Dialog -->
+<div class="full-vh">
+    <p-dialog header="Add Data" [(visible)]="visibleAdd" [position]="position" [style]="{ height: '100vh' }">
+        <form [formGroup]="heroFrom" (ngSubmit)="submitHero()">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="field">
+                        <label for="" class="d-block">Category</label>
+                        <p-dropdown class="w-100" [options]="categories" formControlName="category"
+                            (onChange)="onCategoryChange()" placeholder="Select a category" optionLabel="label"
+                            optionValue="value">
+                        </p-dropdown>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="field">
+                        <label for="" class="d-block">Title</label>
+                        <input class="w-100" type="text" pInputText formControlName="title">
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-6">
+                    <div>
+                        <label for="file">Select Image:</label>
+                        <input id="file" class="form-control" type="file" (change)="onFileSelected($event)" />
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-6">
+                    <div class="field">
+                        <label for="" class="d-block">Text1</label>
+                        <input class="w-100" type="text" pInputText formControlName="text1">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="field">
+                        <label for="" class="d-block">Text2</label>
+                        <input class="w-100" type="text" pInputText formControlName="text2">
+                    </div>
+                </div>
+            </div>
+            <div class="field mt-2">
+                <label for="" class="d-block">Description</label>
+                <textarea type="text" rows="5" class="w-100" pInputText formControlName="desc"></textarea>
+            </div>
+
+            <button pButton label="Submit" type="submit" [disabled]="heroFrom.invalid"></button>
+        </form>
+
+
+    </p-dialog>
+</div>
+
+<!-- loader -->
+<div *ngIf="isLoading">
+    <app-loader></app-loader>
+</div>
