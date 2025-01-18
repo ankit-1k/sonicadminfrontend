@@ -27,7 +27,7 @@ export class ProjectsComponent implements OnInit {
   constructor(private fb: FormBuilder, private projectService: ProjectService, private siteService: WebsiteService) {
     this.projectFrom = this.fb.group({
       name: ['', Validators.required],
-      category: [''],
+      category: ['',Validators.required],
       desc: ['', Validators.required],
       demo: ['', Validators.required]
     })
@@ -60,7 +60,7 @@ export class ProjectsComponent implements OnInit {
       next: (response: any[]) => {
         this.categories = response.map(site => ({
           label: site.name,
-          value: site.value
+          value: site.name
         }))
       },
       error: () => {
