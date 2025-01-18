@@ -15,7 +15,7 @@ export class HeaderComponent implements OnInit {
   constructor(private router: Router, private otpService: HeaderService, private messageService: MessageService,private homeService: HomeService) { }
 
   isFullScreen = false;
-  sidebarVisible2: boolean = true;
+  sidebarVisible2: boolean = false;
   isLoggedIn: boolean = false;
   email: string = 'pandaankit167@gmail.com';
   otpSent: boolean = false;
