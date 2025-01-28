@@ -1,7 +1,8 @@
 <div class="container-fluid" *ngIf="!isLoading">
     <div class="row mt-3">
         <div class="col-md-6 scrollbar" style="height: 85vh;overflow-x: auto;">
-            <p-table [value]="users" responsiveLayout="scroll" [paginator]="true" [rows]="5"
+            <div class="table-model">
+                <p-table [value]="users" responsiveLayout="scroll" [paginator]="true" [rows]="5"
                 [rowsPerPageOptions]="[5, 10, 15]">
                 <ng-template pTemplate="header">
                     <tr>
@@ -37,6 +38,7 @@
                     </tr>
                 </ng-template>
             </p-table>
+            </div>
         </div>
         <div class="col-md-6 theme-light scrollbar position-relative" style="height: 88vh;">
             <div class="d-flex justify-content-between mt-3">
