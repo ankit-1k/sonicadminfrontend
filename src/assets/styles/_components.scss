@@ -121,13 +121,9 @@ p-table {
     }
 }
 
-@media (max-width:500px) {
-    .login-card {
-        width: 100% !important;
-    }
-
+@media (max-width:630px) {
     .table-model {
-        width: 300px;
+        width: 370px;
 
         p-table {
             width: 100%;
@@ -135,9 +131,13 @@ p-table {
     }
 }
 
-@media (max-width:630px) {
+@media (max-width:500px) {
+    .login-card {
+        width: 100% !important;
+    }
+
     .table-model {
-        width: 370px;
+        width: 300px;
 
         p-table {
             width: 100%;
