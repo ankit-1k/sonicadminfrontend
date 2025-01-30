@@ -192,3 +192,9 @@
     </div>
 </div>
 <app-footer></app-footer>
+
+<!-- Task Modal Dialog -->
+<p-button (click)="showDialogTask('top')" icon="bi bi-list-task" severity="secondary" class="position-fixed end-0 bottom-0 mb-2 me-2"></p-button>
+<p-dialog header="Task" [modal]="true" [(visible)]="visibleTask" [position]="positionTask" [style]="{ width: '50rem' }">
+    <app-task></app-task>
+</p-dialog>

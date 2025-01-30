@@ -55,6 +55,7 @@ import { AdmincontactsComponent } from './Admin/Events/admincontacts/admincontac
 import { FooterComponent } from './Common/footer/footer.component';
 import { RequestsComponent } from './Admin/more/requests/requests.component';
 import { AdminreqComponent } from './Admin/more/adminreq/adminreq.component';
+import { TaskComponent } from './Common/task/task.component';
 
 @NgModule({
   declarations: [
@@ -79,6 +80,7 @@ import { AdminreqComponent } from './Admin/more/adminreq/adminreq.component';
     FooterComponent,
     RequestsComponent,
     AdminreqComponent,
+    TaskComponent,
   ],
   imports: [
     ReactiveFormsModule,

@@ -1,0 +1,69 @@
+<div>
+    <p-tabView>
+        <p-tabPanel header="All Tasks">
+            <div class="container-fluid position-relative">
+                <div class="row" *ngIf="allTasks.length >0">
+                    <div class="col-md-7 task-container scrollbar">
+                        <div *ngFor="let task of allTasks">
+                            <div class="task" (click)="selectTask(task)" [ngClass]="{
+                                'expired-task': isTaskExpired(task),
+                                'next-upcoming-task': task._id === getNextUpcomingTaskId()
+                             }">
+                                <p class="col-6">{{task.taskName}}</p>
+                                <p class="col-3">{{task.setDate | date:'yyyy-MM-dd HH:mm:ss'}}</p>
+                                <p>
+                                    <button pButton icon="pi pi-trash" (click)="deleteTask(task._id)"></button>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5 position-relative" *ngIf="selectedTask">
+                        <h5>Task Details -</h5>
+                        <p><strong>Task Name:</strong> {{ selectedTask.taskName }}</p>
+                        <p><strong>Set Date:</strong> {{ selectedTask.setDate | date: 'yyyy-MM-dd HH:mm:ss' }}</p>
+                        <p><strong>Message:</strong> {{ selectedTask.message }}</p>
+                    </div>
+                </div>
+                <!-- boxes -->
+                <div class="task-info-container">
+                    <div class="schedule"></div>Scheduled &nbsp;
+                    <div class="upcoming"></div>Upcoming &nbsp;
+                    <div class="expired"></div>Expired &nbsp;
+                </div>
+                <div class="row" *ngIf="allTasks.length<1">
+                    <div class="col task-container d-flex justify-content-center align-items-center">
+                        <p class="sub-head-animated">No Task Available</p>
+                    </div>
+                </div>
+            </div>
+        </p-tabPanel>
+        <p-tabPanel header="Add Task">
+            <div class="container position-relative">
+                <form class="row" [formGroup]="taskForm" (ngSubmit)="submitTask()">
+                    <div class="col-md-6">
+                        <div class="field">
+                            <label for="" class="d-block">Task Name</label>
+                            <input pInputText type="text" class="w-100" formControlName="taskName">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="field">
+                            <label for="" class="d-block">Set Date & Time</label>
+                            <p-calendar formControlName="setDate" [showTime]="true" hourFormat="24"></p-calendar>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="field mt-2">
+                            <label for="" class="d-block">Message</label>
+                            <textarea type="text" rows="5" class="w-100" pInputText
+                                formControlName="message"></textarea>
+                        </div>
+                        <span class="mt-1 mb-1">{{message}}</span>
+                        <button class="w-100 " pButton label="Post" icon="pi pi-send"></button>
+                    </div>
+                </form>
+            </div>
+        </p-tabPanel>
+    </p-tabView>
+
+</div>

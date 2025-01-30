@@ -28,6 +28,9 @@ export class HomeComponent implements OnInit {
   siteNames: any[] = []
   allAnnouncements: any[] = []
   allTeleUsers: any[] = [] 
+  visibleTask: boolean = false;
+  positionTask: string = 'center';
+
   // carouselItems: any[] = [
   //   {
   //     img: 'https://cdn.pixabay.com/photo/2016/11/21/17/59/blackboard-1846865_640.jpg',
@@ -170,6 +173,11 @@ export class HomeComponent implements OnInit {
     else{
       Swal.fire('Invalid!','invalid data...','warning')
     }
+  }
+
+  showDialogTask(position: string) {
+    this.positionTask = position;
+    this.visibleTask = true;
   }
 
   ngOnInit(): void {

@@ -1,0 +1,123 @@
+:host ::ng-deep .p-calendar .p-datepicker {
+    top: -60px !important;
+    height: 400px;
+    overflow: auto;
+  }
+  
+  .task-container {
+    height: 303px;
+    overflow: auto;
+  }
+  
+  .task {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #673AB7;
+    color: white;
+    margin-top: 10px;
+    padding: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .task:hover {
+    background-color: #5929ac;
+    cursor: pointer;
+  }
+  
+  .task p {
+    margin: 0;
+    font-size: 16px;
+  }
+  
+  .task p:first-child {
+    font-weight: bold;
+  }
+  
+  .task p:last-child {
+    margin-left: 10px;
+  }
+  
+  .expired-task {
+    background-color: #360000 !important;
+    color: white;
+  }
+  
+  @keyframes textColorChange {
+    0% {
+      color: rgb(18, 3, 37);
+    }
+  
+    25% {
+      color: rgb(27, 4, 90);
+    }
+  
+    50% {
+      color: rgb(3, 24, 29);
+    }
+  
+    75% {
+      color: rgb(18, 4, 58);
+    }
+  
+    100% {
+      color: rgb(1, 29, 27);
+    }
+  }
+  
+  .sub-head-animated {
+    font-size: 24px;
+    font-weight: bold;
+    animation: textColorChange 6s ease-in-out infinite;
+  }
+  
+  .next-upcoming-task {
+    position: relative;
+    padding: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    color: black;
+    border-left: 5px solid #ff9800;
+    overflow: hidden;
+    background: linear-gradient(90deg, #ffeb3b 25%, #ff9800 50%, #ffeb3b 75%);
+    background-size: 200% 100%;
+    animation: loadingEffect 3s linear infinite;
+  }
+  
+  /* Keyframes for left-to-right movement */
+  @keyframes loadingEffect {
+    0% {
+      background-position: 200% 0;
+    }
+  
+    100% {
+      background-position: -200% 0;
+    }
+  }
+  
+  .task-info-container {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    font-size: 9px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  
+    .schedule,
+    .upcoming,
+    .expired {
+      height: 10px;
+      width: 10px;
+      background-color: #673AB7;
+    }
+  
+    .upcoming {
+      background-color: #ff9800;
+    }
+  
+    .expired {
+      background-color: #360000;
+    }
+  }
