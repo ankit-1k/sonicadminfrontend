@@ -1,0 +1,215 @@
+<div *ngIf="!isLoading">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="box scrollbar" style="height: 91vh">
+          <div class="d-flex justify-content-between mt-3 mb-2 me-1">
+            <h4 class="mt-1 ms-2 res-m-0">
+              View Data <i class="bi bi-bootstrap-fill"></i>
+            </h4>
+          </div>
+          <p-table
+            responsiveLayout="scroll"
+            [paginator]="true"
+            [rows]="5"
+            [rowsPerPageOptions]="[5, 10, 15]"
+            [value]="allCollectData"
+          >
+            <ng-template pTemplate="header">
+              <tr>
+                <th>
+                  <button
+                    pButton
+                    label="Delete All"
+                    icon="pi pi-trash"
+                    class="w-100 bg-danger"
+                    (click)="deleteAllData()"
+                  ></button>
+                </th>
+                <th>Org Name</th>
+                <th>Org Type</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Country</th>
+                <th>Description</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-collectdata>
+              <tr>
+                <td>
+                  <p-button
+                    styleClass="p-button-rounded me-1 p-button-info p-button-text p-button-raised"
+                    icon="pi pi-pencil"
+                    (click)="editData(collectdata)"
+                  ></p-button>
+                  <p-button
+                    styleClass="p-button-rounded me-1 p-button-danger p-button-text p-button-raised"
+                    icon="pi pi-trash"
+                    (click)="deleteData(collectdata._id)"
+                  ></p-button>
+                  <p-button
+                    styleClass="p-button-rounded p-button-success p-button-text p-button-raised"
+                    icon="bi bi-envelope"
+                    (click)="sendMailDialog(collectdata.email, 'bottomright')"
+                  ></p-button>
+                </td>
+                <td>{{ collectdata.orgName }}</td>
+                <td>{{ collectdata.orgType }}</td>
+                <td>{{ collectdata.email }}</td>
+                <td>{{ collectdata.phone }}</td>
+                <td>{{ collectdata.country }}</td>
+                <td>{{ collectdata.details }}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+      <div
+        class="col-md-6 position-relative theme-light ps-0 pe-0"
+        style="height: 91vh"
+      >
+        <div class="box scrollbar">
+          <div class="mt-0">
+            <p-tabView>
+              <p-tabPanel header="Form">
+                <form [formGroup]="formData" (ngSubmit)="addOrUpdateData()">
+                  <div class="row mt-3">
+                    <div class="col-md-6">
+                      <div class="field">
+                        <label class="d-block">Org Name</label>
+                        <input
+                          type="text"
+                          class="w-100"
+                          pInputText
+                          formControlName="orgName"
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="field">
+                        <label class="d-block">Org Type</label>
+                        <p-dropdown
+                          class="p-0 m-0"
+                          [options]="orgType"
+                          formControlName="orgType"
+                          placeholder="Select a category"
+                          optionLabel="label"
+                          optionValue="name"
+                        >
+                        </p-dropdown>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mt-2">
+                      <div class="field">
+                        <label class="d-block">Email</label>
+                        <input
+                          type="text"
+                          class="w-100"
+                          pInputText
+                          formControlName="email"
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-6 mt-2">
+                      <div class="field">
+                        <label class="d-block">Phone</label>
+                        <input
+                          type="text"
+                          class="w-100"
+                          pInputText
+                          formControlName="phone"
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-6 mt-2">
+                      <div class="field">
+                        <label class="d-block">Country</label>
+                        <p-dropdown
+                          class="p-0 m-0"
+                          [options]="countryName"
+                          formControlName="country"
+                          placeholder="Select a category"
+                          optionLabel="label"
+                          optionValue="name"
+                        >
+                        </p-dropdown>
+                      </div>
+                    </div>
+                    <div class="col-md-12 mt-2">
+                      <div class="field">
+                        <label class="d-block">Details</label>
+                        <textarea
+                          type="text"
+                          class="w-100"
+                          rows="4"
+                          pInputTextarea
+                          formControlName="details"
+                        ></textarea>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="d-flex justify-content-between">
+                        <button
+                          pButton
+                          class="mt-2"
+                          [label]="editMode ? 'Update' : 'Add'"
+                        ></button>
+                        <button
+                          *ngIf="editMode"
+                          pButton
+                          class="mt-2 p-button-danger"
+                          label="Cancel"
+                          (click)="cancelEdit()"
+                        ></button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </p-tabPanel>
+              <p-tabPanel header="Mail-Sender">
+                <app-mailsender></app-mailsender>
+              </p-tabPanel>
+            </p-tabView>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p-dialog
+    header="Send Mail"
+    [modal]="true"
+    [(visible)]="visible"
+    [position]="position"
+    [style]="{ width: '25rem' }"
+  >
+    <form [formGroup]="emailForm" (ngSubmit)="sendMail()">
+      <p class="text-success">To: {{ recipientEmail }}</p>
+      <div class="field">
+        <label class="d-block">Subject:</label>
+        <input type="text" class="w-100" pInputText formControlName="subject" />
+      </div>
+      <div class="field">
+        <label class="d-block">Message:</label>
+        <textarea
+          class="w-100"
+          pInputTextarea
+          rows="5"
+          formControlName="message"
+        ></textarea>
+      </div>
+      <button
+        pButton
+        class="bg-success w-100"
+        label="Send"
+        icon="bi bi-send"
+        type="submit"
+      ></button>
+    </form>
+  </p-dialog>
+</div>
+
+<!-- loader -->
+<div *ngIf="isLoading">
+    <app-loader></app-loader>
+</div>

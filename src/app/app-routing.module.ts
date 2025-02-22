@@ -19,6 +19,7 @@ import { OtpGuard } from './otp.guard';
 import { AdmincontactsComponent } from './Admin/Events/admincontacts/admincontacts.component';
 import { RequestsComponent } from './Admin/more/requests/requests.component';
 import { AdminreqComponent } from './Admin/more/adminreq/adminreq.component';
+import { CollectdataComponent } from './SuperAdmin/collectdata/collectdata.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -44,6 +45,8 @@ const routes: Routes = [
   // test
   { path: 'requests', component: RequestsComponent, canActivate: [AuthGuard,OtpGuard] },
   { path: 'adminrequests', component: AdminreqComponent, canActivate: [AuthGuard,OtpGuard] },
+  // collect data
+  { path: 'collectdata', component: CollectdataComponent},
   // test
   { path: 'test1', component: CloudnaryComponent, canActivate: [AuthGuard] },
 ];
