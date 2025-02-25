@@ -3,69 +3,14 @@
         <div class="col-md-6 scrollbar" style="height: 85vh;overflow-x: auto;">
             <div>
                 <p-table [value]="users" responsiveLayout="scroll" [paginator]="true" [rows]="5"
-                [rowsPerPageOptions]="[5, 10, 15]">
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th>
-                            Action
-                            <button pButton (click)="showDialogAdd('right')" icon="pi pi-plus"
-                                class="rounded-pill p-0"></button>
-                        </th>
-                        <th>Name</th>
-                        <th>User Name</th>
-                        <th>Date</th>
-                        <th>Ac No</th>
-                        <th>Co Name</th>
-                        <th>Paid</th>
-                        <th>Status</th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-user>
-                    <tr>
-                        <td>
-                            <button pButton icon="pi pi-pencil" (click)="editSales(user,'right')"
-                                class="bg-info"></button>
-                            <button pButton icon="pi pi-trash" (click)="deleteSales(user._id)"
-                                class="bg-danger ms-1 res-m-0"></button>
-                        </td>
-                        <td>{{user.name}}</td>
-                        <td>{{user.userName}}</td>
-                        <td>{{user.date | date: 'shortDate' }}</td>
-                        <td>{{user.accNo}}</td>
-                        <td>{{user.coName}}</td>
-                        <td>{{user.amount | currency: 'INR': 'symbol' : '1.2-2' }}</td>
-                        <td>{{user.status}}</td>
-                    </tr>
-                </ng-template>
-            </p-table>
-            </div>
-        </div>
-        <div class="col-md-6 theme-light scrollbar position-relative" style="height: 88vh;">
-            <div class="d-flex justify-content-between mt-3">
-                <h4>TS</h4>
-            </div>
-            <div>
-                <p *ngIf="mnt.length === 0">No data available for the current year.</p>
-                <p-chart *ngIf="mnt.length > 0" [type]="'bar'" [data]="chartData" [options]="chartOptions"></p-chart>
-            </div>
-            <p label="View" class="btn btn-link position-absolute bottom-0" icon="pi pi-eye" (click)="showDialogData('right')">View rv & search user</p>
-        </div>
-    </div>
-</div>
-
-<div class="full-vh">
-    <p-dialog header="View Data" [(visible)]="visibleData" [position]="position" [style]="{ height: '100vh' }">
-        <div class="container-fluid">
-            <div *ngIf="mnt.length > 0">
-                <div class="search-box">
-                    <input type="text" [(ngModel)]="user" (keydown.enter)="searchUser()" placeholder="Enter User Name" class="w-100" pInputText>
-                    <button pButton icon="pi pi-search" (click)="searchUser()"></button>
-                </div>
-                <div class="table-model">
-                    <p-table *ngIf="searchedUsers.length>0" [value]="searchedUsers" responsiveLayout="scroll"
-                    [paginator]="true" [rows]="2" [rowsPerPageOptions]="[2, 4, 6]">
+                    [rowsPerPageOptions]="[5, 10, 15]">
                     <ng-template pTemplate="header">
                         <tr>
+                            <th>
+                                Action
+                                <button pButton (click)="showDialogAdd('right')" icon="pi pi-plus"
+                                    class="rounded-pill p-0"></button>
+                            </th>
                             <th>Name</th>
                             <th>User Name</th>
                             <th>Date</th>
@@ -77,6 +22,12 @@
                     </ng-template>
                     <ng-template pTemplate="body" let-user>
                         <tr>
+                            <td>
+                                <button pButton icon="pi pi-pencil" (click)="editSales(user,'right')"
+                                    class="bg-info"></button>
+                                <button pButton icon="pi pi-trash" (click)="deleteSales(user._id)"
+                                    class="bg-danger ms-1 res-m-0"></button>
+                            </td>
                             <td>{{user.name}}</td>
                             <td>{{user.userName}}</td>
                             <td>{{user.date | date: 'shortDate' }}</td>
@@ -87,6 +38,57 @@
                         </tr>
                     </ng-template>
                 </p-table>
+            </div>
+        </div>
+        <div class="col-md-6 theme-light scrollbar position-relative" style="height: 88vh;">
+            <div class="d-flex justify-content-between mt-3">
+                <h4>TS</h4>
+            </div>
+            <div>
+                <p *ngIf="mnt.length === 0">No data available for the current year.</p>
+                <p-chart *ngIf="mnt.length > 0" [type]="'bar'" [data]="chartData" [options]="chartOptions"></p-chart>
+            </div>
+            <p label="View" class="btn btn-link position-absolute bottom-0" icon="pi pi-eye"
+                (click)="showDialogData('right')">View rv & search user</p>
+        </div>
+    </div>
+</div>
+
+<div class="full-vh">
+    <p-dialog header="View Data" [(visible)]="visibleData" [position]="position" [style]="{ height: '100vh' }">
+        <div class="container-fluid">
+            <div *ngIf="mnt.length > 0">
+                <div class="search-box">
+                    <input type="text" [(ngModel)]="user" (keydown.enter)="searchUser()" placeholder="Enter User Name"
+                        class="w-100" pInputText>
+                    <button pButton icon="pi pi-search" (click)="searchUser()"></button>
+                </div>
+                <div class="table-model">
+                    <p-table *ngIf="searchedUsers.length>0" [value]="searchedUsers" responsiveLayout="scroll"
+                        [paginator]="true" [rows]="2" [rowsPerPageOptions]="[2, 4, 6]">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Name</th>
+                                <th>User Name</th>
+                                <th>Date</th>
+                                <th>Ac No</th>
+                                <th>Co Name</th>
+                                <th>Paid</th>
+                                <th>Status</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-user>
+                            <tr>
+                                <td>{{user.name}}</td>
+                                <td>{{user.userName}}</td>
+                                <td>{{user.date | date: 'shortDate' }}</td>
+                                <td>{{user.accNo}}</td>
+                                <td>{{user.coName}}</td>
+                                <td>{{user.amount | currency: 'INR': 'symbol' : '1.2-2' }}</td>
+                                <td>{{user.status}}</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
                 </div>
                 <div>
                     <h3>Monthly Totals</h3>
@@ -119,13 +121,17 @@
                 <div class="col-md-6 mt-3">
                     <div class="field">
                         <label for="name" class="d-block">Name</label>
-                        <input type="text" class="w-100" pInputText formControlName="name">
+                        <p-autoComplete formControlName="name" [suggestions]="filteredNames"
+                            (completeMethod)="filterNames($event)" placeholder="Search Name" class="w-100">
+                        </p-autoComplete>
                     </div>
                 </div>
                 <div class="col-md-6 mt-3">
                     <div class="field">
                         <label for="userName" class="d-block">User Name</label>
-                        <input type="text" class="w-100" pInputText formControlName="userName">
+                        <p-autoComplete formControlName="userName" [suggestions]="filteredUsernames"
+                            (completeMethod)="filterUsernames($event)" placeholder="Search Username" class="w-100">
+                        </p-autoComplete>
                     </div>
                 </div>
                 <div class="col-md-6 mt-3">

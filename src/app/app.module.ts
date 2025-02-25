@@ -35,6 +35,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { FileUploadModule } from 'primeng/fileupload';
 import { CommonModule } from '@angular/common';
 import { OverlayPanelModule } from 'primeng/overlaypanel'
+import { AutoCompleteModule } from 'primeng/autocomplete';
+
 // components start ------------------------------------------------------------------>
 import { LoginComponent } from './login/login.component';
 import { TelusersComponent } from './Admin/Telegram/telusers/telusers.component';
@@ -119,6 +121,7 @@ import { MailsenderComponent } from './SuperAdmin/collectdata/mailsender/mailsen
     InputNumberModule,
     CommonModule ,
     OverlayPanelModule,
+    AutoCompleteModule
   ],
   providers: [MessageService],
   bootstrap: [AppComponent]

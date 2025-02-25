@@ -34,6 +34,11 @@ export class SalesComponent implements OnInit {
   user: string = ''
 
   editingSalesId: any;
+  allNames: string[] = [];  // Array to store only names
+  allUsernames: string[] = [];  // Array to store only usernames
+
+  filteredNames: string[] = [];
+  filteredUsernames: string[] = [];
 
   constructor(private fb: FormBuilder, private salesService: SalesService) {
     this.salesForm = this.fb.group({
@@ -132,6 +137,7 @@ export class SalesComponent implements OnInit {
 
   ngOnInit() {
     this.fetchSales()
+    this.getAllTeleSale()
   }
 
   fetchSales() {
@@ -208,6 +214,33 @@ export class SalesComponent implements OnInit {
     });
   }
 
+  getAllTeleSale() {
+    this.salesService.getAllTeleSale().subscribe({
+      next: response => {
+        if (response && Array.isArray(response)) {
+          this.allNames = response.map(item => item.name);
+          this.allUsernames = response.map(item => item.userName);
+        }
+        console.log('Names:', this.allNames);
+        console.log('Usernames:', this.allUsernames);
+      }
+    });
+  }
+
+  filterNames(event: any) {
+    let query = event.query.toLowerCase();
+    this.filteredNames = this.allNames.filter(name =>
+      name.toLowerCase().includes(query)
+    );
+  }
+
+  filterUsernames(event: any) {
+    let query = event.query.toLowerCase();
+    this.filteredUsernames = this.allUsernames.filter(username =>
+      username.toLowerCase().includes(query)
+    );
+  }
+  
   searchUser() {
     if (this.user) {
       console.log('Searching for user:', this.user);  // Log the search term

@@ -29,5 +29,9 @@ export class SalesService {
 
   searchUser(data: string): Observable<any> {
     return this.http.get(`${this.baseSales}/searchuser/${data}`);
-  }  
+  }
+  
+  getAllTeleSale():Observable<any>{
+    return this.http.get<any>(`${this.baseSales}/getsales`)
+  }
 } 

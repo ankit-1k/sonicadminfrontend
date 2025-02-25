@@ -1,1 +1,42 @@
-<p>mailsender works!</p>
+<div>
+    <div class="container-fluid ps-0 pe-0">
+        <form [formGroup]="mailForm" (ngSubmit)="sendMail()" class="row">
+            <div class="col-md-6">
+                <div class="field">
+                    <label class="d-block">Select Org Type:</label>
+                    <p-dropdown class="w-100" [options]="orgType" formControlName="selectedOrgType"
+                        placeholder="Select a category" optionLabel="label" optionValue="name">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="field">
+                    <label class="d-block">Subject:</label>
+                    <input type="text" class="w-100" pInputText formControlName="subject">
+                </div>
+            </div>
+            <div class="col-12 mt-3">
+                <div class="field">
+                    <label class="d-block">Message:</label>
+                    <textarea class="w-100" rows="5" pInputTextarea formControlName="message"></textarea>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <button pButton label="View Mails" icon="bi bi-eye" class="bg-success w-100" type="button"
+                    (click)="showDialogMails('bottomright')"></button>
+                <p-dialog header="Posting Mails" [modal]="true" [(visible)]="visibleMails" [position]="position"
+                    [style]="{ width: '25rem' }">
+                    <ul *ngIf="filteredEmails.length > 0">
+                        <li *ngFor="let email of filteredEmails">{{ email }}</li>
+                    </ul>
+                    <div class="d-flex justify-content-center align-items-center" style="height: 20vh;">
+                        <p class="text-danger fw-bold blink" *ngIf="filteredEmails.length === 0">No emails found.</p>
+                    </div>
+                </p-dialog>
+            </div>
+            <div class="col-md-6">
+                <button pButton label="Send" icon="bi bi-send" class="w-100" type="submit"></button>
+            </div>
+        </form>
+    </div>
+</div>
