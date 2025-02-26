@@ -48,8 +48,8 @@
                 <p *ngIf="mnt.length === 0">No data available for the current year.</p>
                 <p-chart *ngIf="mnt.length > 0" [type]="'bar'" [data]="chartData" [options]="chartOptions"></p-chart>
             </div>
-            <p label="View" class="btn btn-link position-absolute bottom-0" icon="pi pi-eye"
-                (click)="showDialogData('right')">View rv & search user</p>
+            <p label="View" class="btn btn-link position-absolute bottom-0" icon="pi pi-eye"(click)="showDialogData('right')">View rv & search user</p>
+            <p label="View" class="btn btn-link position-absolute bottom-0 end-0" icon="pi pi-eye"(click)="navigateWithParam('1')">View Top Customers</p>
         </div>
     </div>
 </div>
@@ -121,15 +121,17 @@
                 <div class="col-md-6 mt-3">
                     <div class="field">
                         <label for="name" class="d-block">Name</label>
-                        <p-autoComplete [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" formControlName="name" [suggestions]="filteredNames"
-                            (completeMethod)="filterNames($event)" placeholder="Search Name" class="w-100">
+                        <p-autoComplete [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}"
+                            formControlName="name" [suggestions]="filteredNames" (completeMethod)="filterNames($event)"
+                            placeholder="Search Name" class="w-100">
                         </p-autoComplete>
                     </div>
                 </div>
                 <div class="col-md-6 mt-3">
                     <div class="field">
                         <label for="userName" class="d-block">User Name</label>
-                        <p-autoComplete [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" formControlName="userName" [suggestions]="filteredUsernames"
+                        <p-autoComplete [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}"
+                            formControlName="userName" [suggestions]="filteredUsernames"
                             (completeMethod)="filterUsernames($event)" placeholder="Search Username" class="w-100">
                         </p-autoComplete>
                     </div>
