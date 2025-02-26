@@ -22,7 +22,7 @@
             </p-table>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-6 scrollbar" style="height: 85vh; overflow-x: auto;">
             <p-tabView>
                 <p-tabPanel header="View User">
                     <div *ngIf="selectedUser; else noUserSelected">
@@ -38,20 +38,22 @@
                 </p-tabPanel>
 
                 <p-tabPanel header="Top Customers">
-                    <p-table [value]="topCustomers">
-                        <ng-template pTemplate="header">
-                            <tr>
-                                <th>Name</th>
-                                <th>Total Amount</th>
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="body" let-user>
-                            <tr>
-                                <td>{{ user.name }}</td>
-                                <td>{{ user.totalAmount }}</td>
-                            </tr>
-                        </ng-template>
-                    </p-table>
+                    <div class="scrollbar" style="height: 70vh; overflow-x: auto;">
+                        <p-table [value]="topCustomers">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Total Amount</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-user>
+                                <tr>
+                                    <td>{{ user.name }}</td>
+                                    <td>{{ user.totalAmount }}</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
                 </p-tabPanel>
             </p-tabView>
         </div>
