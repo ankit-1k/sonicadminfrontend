@@ -23,7 +23,7 @@
         </div>
 
         <div class="col-md-6 scrollbar" style="height: 85vh; overflow-x: auto;">
-            <p-tabView>
+            <p-tabView [(activeIndex)]="activeTabIndex">
                 <p-tabPanel header="View User">
                     <div *ngIf="selectedUser; else noUserSelected">
                         <h5>User Details</h5>
