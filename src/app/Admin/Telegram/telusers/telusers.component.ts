@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { TeleusersService } from 'src/app/services/tele/teleusers.service';
 
 @Component({
@@ -11,11 +12,15 @@ export class TelusersComponent implements OnInit {
   selectedUser: any = null; 
   topCustomers: any[] = []; 
   isLoading:boolean=false
+  activeTabIndex: number = 0;
 
-  constructor(private usersService: TeleusersService) {}
+  constructor(private usersService: TeleusersService, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.fetchAllUsers();
+    this.route.queryParams.subscribe(params => {
+      this.activeTabIndex=params['data']
+    });
   }
 
   fetchAllUsers() {
@@ -42,9 +47,6 @@ export class TelusersComponent implements OnInit {
         this.topCustomers = [...this.usersList]
           .sort((a, b) => b.totalAmount - a.totalAmount)
           .slice(0, 10);
-
-        console.log('Processed Users:', this.usersList);
-        console.log('Top 10 Customers:', this.topCustomers);
       },
       error: (error) => {
         console.log('Error In Telusers - : ', error);
@@ -56,5 +58,9 @@ export class TelusersComponent implements OnInit {
   // Function to select user for viewing details
   viewUserDetails(user: any) {
     this.selectedUser = user;
+  }
+
+  switchTab(tabIndex: number) {
+    this.activeTabIndex = tabIndex;
   }
 }
