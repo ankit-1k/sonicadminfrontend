@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ChartOptions } from 'chart.js';
 import { SalesService } from 'src/app/services/tele/sales.service';
 import Swal from 'sweetalert2';
@@ -40,7 +41,7 @@ export class SalesComponent implements OnInit {
   filteredNames: string[] = [];
   filteredUsernames: string[] = [];
 
-  constructor(private fb: FormBuilder, private salesService: SalesService) {
+  constructor(private fb: FormBuilder, private salesService: SalesService, private router: Router) {
     this.salesForm = this.fb.group({
       name: ['', Validators.required],
       userName: ['', Validators.required],
@@ -221,8 +222,6 @@ export class SalesComponent implements OnInit {
           this.allNames = response.map(item => item.name);
           this.allUsernames = response.map(item => item.userName);
         }
-        console.log('Names:', this.allNames);
-        console.log('Usernames:', this.allUsernames);
       }
     });
   }
@@ -243,11 +242,9 @@ export class SalesComponent implements OnInit {
   
   searchUser() {
     if (this.user) {
-      console.log('Searching for user:', this.user);  // Log the search term
       this.salesService.searchUser(this.user).subscribe({
         next: response => {
           this.searchedUsers=response
-          console.log(this.searchedUsers)
         },
         error: error => {
           console.log(error);
@@ -266,5 +263,11 @@ export class SalesComponent implements OnInit {
   showDialogData(position: string) {
     this.position = position
     this.visibleData = true
+  }
+
+  navigateWithParam(value: string) {
+    this.router.navigate(['/telusers'], { 
+      queryParams: { data: value } 
+    });
   }
 }
