@@ -121,7 +121,7 @@
                 <div class="col-md-6 mt-3">
                     <div class="field">
                         <label for="name" class="d-block">Name</label>
-                        <p-autoComplete formControlName="name" [suggestions]="filteredNames"
+                        <p-autoComplete [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" formControlName="name" [suggestions]="filteredNames"
                             (completeMethod)="filterNames($event)" placeholder="Search Name" class="w-100">
                         </p-autoComplete>
                     </div>
@@ -129,7 +129,7 @@
                 <div class="col-md-6 mt-3">
                     <div class="field">
                         <label for="userName" class="d-block">User Name</label>
-                        <p-autoComplete formControlName="userName" [suggestions]="filteredUsernames"
+                        <p-autoComplete [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" formControlName="userName" [suggestions]="filteredUsernames"
                             (completeMethod)="filterUsernames($event)" placeholder="Search Username" class="w-100">
                         </p-autoComplete>
                     </div>
