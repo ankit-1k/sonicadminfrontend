@@ -1,0 +1,79 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box scrollbar" style="height: 91vh;">
+                <div class="d-flex justify-content-between mt-1 mb-1">
+                    <p-dropdown [options]="categories" [(ngModel)]="selectedCategory" placeholder="Select Category"
+                        (onChange)="filterEntries()" class="mt-2"></p-dropdown>
+                    <p-button label="Add New Entry" icon="pi pi-plus" class="p-button-success mt-3"
+                        (click)="openDialog()"></p-button>
+                </div>
+                <p-table [value]="filteredList" responsiveLayout="scroll" [paginator]="true" [rows]="5">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>Description</th>
+                            <th>Category</th>
+                            <th>Actions</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-entry>
+                        <tr>
+                            <td>{{ entry.CName }}</td>
+                            <td>{{ entry.CPhone }}</td>
+                            <td>{{ entry.Description }}</td>
+                            <td>{{ entry.Category }}</td>
+                            <td>
+                                <p-button styleClass="p-button-rounded p-button-warning p-button-text"
+                                    icon="pi pi-pencil" (click)="openDialog(entry)"></p-button>
+                                <p-button styleClass="p-button-rounded p-button-danger p-button-text"
+                                    icon="pi pi-trash" (click)="deleteEntry(entry._id)"></p-button>
+                                <p-button styleClass="p-button-rounded p-button-success p-button-text"
+                                    icon="pi pi-whatsapp" (click)="sendWhatsAppMessage(entry.CPhone)"></p-button>
+                                    <p-button 
+                                    styleClass="p-button-rounded p-button-primary p-button-text" 
+                                    icon="pi pi-phone" 
+                                    (click)="makePhoneCall(entry.CPhone)">
+                                  </p-button>                                  
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="box scrollbar theme-light pt-3" style="height: 91vh;">
+                <h6 class="pb-2">Insert / Edit Record</h6>
+                <form [formGroup]="phonemailerForm" (ngSubmit)="submitForm()">
+                    <div class="p-fluid ps-2 pe-2">
+                        <div class="p-field mt-2">
+                            <label for="CName">Name</label>
+                            <input id="CName" type="text" pInputText formControlName="CName" />
+                        </div>
+                        
+                        <div class="p-field mt-2">
+                            <label for="Category">Category</label>
+                            <p-dropdown id="Category" [options]="categories" formControlName="Category" placeholder="Select Category"></p-dropdown>
+                        </div>
+
+                        <div class="p-field mt-2">
+                            <label for="CPhone">Phone</label>
+                            <input id="CPhone" type="text" pInputText formControlName="CPhone" />
+                        </div>
+            
+                        <div class="p-field mt-2">
+                            <label for="Description">Description</label>
+                            <textarea id="Description" pInputTextarea formControlName="Description" rows="3"></textarea>
+                        </div>
+            
+                        <div class="p-d-flex p-jc-end mt-3">
+                            <p-button label="Submit" class="p-button-success" type="submit" [disabled]="phonemailerForm.invalid"></p-button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>  

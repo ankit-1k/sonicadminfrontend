@@ -20,6 +20,7 @@ import { AdmincontactsComponent } from './Admin/Events/admincontacts/admincontac
 import { RequestsComponent } from './Admin/more/requests/requests.component';
 import { AdminreqComponent } from './Admin/more/adminreq/adminreq.component';
 import { CollectdataComponent } from './SuperAdmin/collectdata/collectdata.component';
+import { PhonemailerComponent } from './SuperAdmin/WpMailer/phonemailer/phonemailer.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -47,6 +48,7 @@ const routes: Routes = [
   { path: 'adminrequests', component: AdminreqComponent, canActivate: [AuthGuard,OtpGuard] },
   // collect data
   { path: 'collectdata', component: CollectdataComponent},
+  { path: 'phonemailer', component: PhonemailerComponent},
   // test
   { path: 'test1', component: CloudnaryComponent, canActivate: [AuthGuard] },
 ];

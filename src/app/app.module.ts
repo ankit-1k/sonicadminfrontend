@@ -60,6 +60,7 @@ import { AdminreqComponent } from './Admin/more/adminreq/adminreq.component';
 import { TaskComponent } from './Common/task/task.component';
 import { CollectdataComponent } from './SuperAdmin/collectdata/collectdata.component';
 import { MailsenderComponent } from './SuperAdmin/collectdata/mailsender/mailsender.component';
+import { PhonemailerComponent } from './SuperAdmin/WpMailer/phonemailer/phonemailer.component';
 
 @NgModule({
   declarations: [
@@ -87,6 +88,7 @@ import { MailsenderComponent } from './SuperAdmin/collectdata/mailsender/mailsen
     TaskComponent,
     CollectdataComponent,
     MailsenderComponent,
+    PhonemailerComponent,
   ],
   imports: [
     ReactiveFormsModule,
