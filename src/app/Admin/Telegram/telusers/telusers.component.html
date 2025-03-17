@@ -1,52 +1,65 @@
-<div class="container-fluid">
+<div class="container-fluid" *ngIf="!isLoading">
     <div class="row mt-3">
-        <div class="col-md-6 scrollbar" style="height: 85vh;overflow-x: auto;">
-            <div class="d-flex justify-content-end">
-                <p-dropdown [options]="items" [(ngModel)]="selectedFilter" placeholder="Select an Option"
-                    optionLabel="label" optionValue="value" (onChange)="applyFilter()">
-                </p-dropdown>
-            </div>
-            <p-table [value]="filteredUsers" responsiveLayout="scroll" [paginator]="true" [rows]="5"
+        <div class="col-md-6 scrollbar" style="height: 85vh; overflow-x: auto;">
+            <p-table responsiveLayout="scroll" [value]="usersList" [paginator]="true" [rows]="5"
                 [rowsPerPageOptions]="[5, 10, 15]">
                 <ng-template pTemplate="header">
                     <tr>
                         <th>Action</th>
                         <th>Name</th>
-                        <th>User Name</th>
-                        <th>Date</th>
-                        <th>Ac No</th>
-                        <th>Co Name</th>
-                        <th>Paid</th>
-                        <th>Status</th>
+                        <th>Total Amount</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-user>
                     <tr>
                         <td>
-                            <button pButton icon="pi pi-eye" class="bg-success"
-                                (click)="viewUserDetails(user)"></button>
+                            <button pButton icon="pi pi-eye" class="bg-success" (click)="viewUserDetails(user)"></button>
                         </td>
                         <td>{{ user.name }}</td>
-                        <td>{{ user.userName }}</td>
-                        <td>{{ user.date | date: 'shortDate' }}</td>
-                        <td>{{ user.accNo }}</td>
-                        <td>{{ user.coName }}</td>
-                        <td>{{ user.amount | currency: 'INR': 'symbol':'1.2-2' }}</td>
-                        <td>{{ user.status }}</td>
+                        <td>{{ user.totalAmount }}</td>
                     </tr>
                 </ng-template>
             </p-table>
         </div>
-        <div class="col-md-6">
-            <div *ngIf="selectedUser" class="user-details">
-                <!-- <h3>User Details</h3> -->
-                <p><strong>Name:</strong> {{ selectedUser.name }}</p>
-                <p><strong>User Name:</strong> {{ selectedUser.userName }}</p>
-                <p><strong>Total Amount:</strong> {{ selectedUser.amount | currency: 'INR': 'symbol':'1.2-2' }}</p>
-                <p [ngClass]="getLevelColor(selectedUser.amount)">
-                    <strong>Level:</strong> {{ getLevel(selectedUser.amount) }}
-                </p>
-            </div>
+
+        <div class="col-md-6 scrollbar" style="height: 85vh; overflow-x: auto;">
+            <p-tabView [(activeIndex)]="activeTabIndex">
+                <p-tabPanel header="View User">
+                    <div *ngIf="selectedUser; else noUserSelected">
+                        <h5>User Details</h5>
+                        <p><strong>Name:</strong> {{ selectedUser.name }}</p>
+                        <p><strong>Total Amount:</strong> {{ selectedUser.totalAmount }}</p>
+                    </div>
+                    <ng-template #noUserSelected>
+                        <div class="d-flex justify-content-center align-items-center" style="height: 60vh;">
+                            <p class="blink fw-bold text-center text-danger">Select a user to view details.</p>
+                        </div>
+                    </ng-template>
+                </p-tabPanel>
+
+                <p-tabPanel header="Top Customers">
+                    <div class="scrollbar" style="height: 70vh; overflow-x: auto;">
+                        <p-table [value]="topCustomers">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Total Amount</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-user>
+                                <tr>
+                                    <td>{{ user.name }}</td>
+                                    <td>{{ user.totalAmount }}</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </p-tabPanel>
+            </p-tabView>
         </div>
     </div>
+</div>
+
+<div *ngIf="isLoading">
+    <app-loader></app-loader>
 </div>

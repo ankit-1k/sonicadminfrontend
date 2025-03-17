@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { TeleusersService } from 'src/app/services/tele/teleusers.service';
 
 @Component({
@@ -7,94 +8,59 @@ import { TeleusersService } from 'src/app/services/tele/teleusers.service';
   styleUrls: ['./telusers.component.scss']
 })
 export class TelusersComponent implements OnInit {
+  usersList: any[] = []; 
+  selectedUser: any = null; 
+  topCustomers: any[] = []; 
+  isLoading:boolean=false
+  activeTabIndex: number = 0;
 
-  getAllUsers: any[] = [];
-  aggregatedUsers: any[] = [];
-  filteredUsers: any[] = [];
-  selectedFilter: string = '';
-  selectedUser: any = null;
+  constructor(private usersService: TeleusersService, private route: ActivatedRoute) {}
 
-  items = [
-    { label: 'L1 (Below 500)', value: 'l1' },
-    { label: 'L2 (500 - 1000)', value: 'l2' },
-    { label: 'L3 (2000 - 3000)', value: 'l3' },
-    { label: 'L4 (Above 3000)', value: 'l4' },
-  ];
+  ngOnInit(): void {
+    this.fetchAllUsers();
+    this.route.queryParams.subscribe(params => {
+      this.activeTabIndex=params['data']
+    });
+  }
 
-  constructor(private usersService: TeleusersService) {}
-
-  fetchUsers() {
+  fetchAllUsers() {
+    this.isLoading=true
     this.usersService.getSales().subscribe({
-      next: (response) => {
-        this.getAllUsers = response.map((user: any) => ({
-          ...user,
-          amount: parseFloat(user.amount),
-        }));
-        this.aggregateUsers();
-        this.filteredUsers = [...this.aggregatedUsers];
+      next: (response: any[]) => {
+        const userTotals = new Map<string, { name: string; totalAmount: number }>();
+
+        response.forEach(user => {
+          const name = user.name;
+          const amount = parseFloat(user.amount) || 0;
+
+          if (userTotals.has(name)) {
+            userTotals.get(name)!.totalAmount += amount;
+          } else {
+            userTotals.set(name, { name, totalAmount: amount });
+          }
+        });
+        
+        this.isLoading=false
+        this.usersList = Array.from(userTotals.values());
+
+        // Sort users by totalAmount and take top 10
+        this.topCustomers = [...this.usersList]
+          .sort((a, b) => b.totalAmount - a.totalAmount)
+          .slice(0, 10);
       },
       error: (error) => {
-        console.log(error);
+        console.log('Error In Telusers - : ', error);
+        this.isLoading=false
       }
     });
   }
 
-  aggregateUsers() {
-    const userMap = new Map<string, any>();
-
-    this.getAllUsers.forEach((user) => {
-      if (userMap.has(user.userName)) {
-        const existingUser = userMap.get(user.userName);
-        existingUser.amount += user.amount;
-      } else {
-        userMap.set(user.userName, { ...user });
-      }
-    });
-
-    this.aggregatedUsers = Array.from(userMap.values());
-  }
-
-  applyFilter() {
-    switch (this.selectedFilter) {
-      case 'l1':
-        this.filteredUsers = this.aggregatedUsers.filter(user => user.amount < 500);
-        break;
-      case 'l2':
-        this.filteredUsers = this.aggregatedUsers.filter(user => user.amount >= 500 && user.amount < 1000);
-        break;
-      case 'l3':
-        this.filteredUsers = this.aggregatedUsers.filter(user => user.amount >= 2000 && user.amount <= 3000);
-        break;
-      case 'l4':
-        this.filteredUsers = this.aggregatedUsers.filter(user => user.amount > 3000);
-        break;
-      default:
-        this.filteredUsers = [...this.aggregatedUsers];
-    }
-  }
-
-  // Set selected user for detail view
+  // Function to select user for viewing details
   viewUserDetails(user: any) {
     this.selectedUser = user;
   }
 
-  // Get the level based on the amount
-  getLevel(amount: number): string {
-    if (amount < 500) return 'L1';
-    if (amount >= 500 && amount < 1000) return 'L2';
-    if (amount >= 2000 && amount <= 3000) return 'L3';
-    return 'L4';
-  }
-
-  // Get the color for the level
-  getLevelColor(amount: number): string {
-    if (amount < 500) return 'level-l1';
-    if (amount >= 500 && amount < 1000) return 'level-l2';
-    if (amount >= 2000 && amount <= 3000) return 'level-l3';
-    return 'level-l4';
-  }  
-
-  ngOnInit(): void {
-    this.fetchUsers();
+  switchTab(tabIndex: number) {
+    this.activeTabIndex = tabIndex;
   }
 }
