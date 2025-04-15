@@ -33,6 +33,9 @@ export class SalesComponent implements OnInit {
     { label: 'Green', value: 'green' },
   ];
   user: string = ''
+  allSales: any[] = [];
+  todaySales: any[] = [];
+  totalTodaySalesAmount: number = 0;
 
   editingSalesId: any;
   allNames: string[] = [];  // Array to store only names
@@ -139,11 +142,14 @@ export class SalesComponent implements OnInit {
   ngOnInit() {
     this.fetchSales()
     this.getAllTeleSale()
+    this.getTodaySale();
   }
 
   fetchSales() {
+    this.isLoading=true
     this.salesService.getSales().subscribe({
       next: (response) => {
+        this.isLoading=false
         this.users = response;
         const currentYear = new Date().getFullYear();
         let monthlyAmounts: { [key: string]: number } = {};
@@ -210,11 +216,47 @@ export class SalesComponent implements OnInit {
         this.totalSalesQuantity = parseFloat(totalAmount.toFixed(2)); // Store the total sales as a number
       },
       error: (error) => {
+        this.isLoading=false
         console.error('Error fetching sales data', error);
       },
     });
   }
 
+  getTodaySale(){
+    this.salesService.getSales().subscribe((data: any[]) => {
+      this.allSales = data;
+      this.filterTodaySales();
+    });
+  }
+
+  filterTodaySales(): void {
+    const today = new Date();
+    const todayYear = today.getFullYear();
+    const todayMonth = today.getMonth();
+    const todayDate = today.getDate();
+  
+    this.todaySales = this.allSales.filter((sale: any) => {
+      const saleDate = new Date(sale.date);
+      const saleYear = saleDate.getFullYear();
+      const saleMonth = saleDate.getMonth();
+      const saleDay = saleDate.getDate();
+  
+      const isToday = saleYear === todayYear && saleMonth === todayMonth && saleDay === todayDate;
+  
+      console.log(`Comparing sale date ${saleDate} => isToday: ${isToday}`);
+  
+      return isToday;
+    });
+  
+    this.totalTodaySalesAmount = this.todaySales.reduce(
+      (sum: number, sale: any) => sum + Number(sale.amount),
+      0
+    );
+  
+    console.log('✅ Today\'s sales:', this.todaySales);
+    console.log('💰 Total Amount:', this.totalTodaySalesAmount);
+  }
+  
   getAllTeleSale() {
     this.salesService.getAllTeleSale().subscribe({
       next: response => {
