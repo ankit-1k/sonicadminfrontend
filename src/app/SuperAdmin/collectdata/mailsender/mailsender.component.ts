@@ -16,7 +16,7 @@ export class MailsenderComponent implements OnInit {
   filteredEmails: string[] = []; // Store filtered emails based on selection
   visibleMails: boolean = false;
   position: string = 'center';
-
+  isLoading:boolean=false
   showDialogMails(position: string) {
     this.position = position;
     this.visibleMails = true;
@@ -36,13 +36,16 @@ export class MailsenderComponent implements OnInit {
   }
 
   fetchAllCollectedData() {
+    this.isLoading=true
     this.collectdataService.getCollectData().subscribe({
       next: response => {
         this.allData = response.data;
         console.log(this.allData);
         this.populateOrgTypes();
+        this.isLoading=false
       },
       error: () => {
+        this.isLoading=false
         Swal.fire({
           title: 'Failed',
           text: 'Failed to fetch Data (mailsender)',
@@ -71,6 +74,7 @@ export class MailsenderComponent implements OnInit {
   }
 
   sendMail() {
+    this.isLoading=true
     if (!this.mailForm.valid) {
       Swal.fire('Error', 'Please fill all fields before sending mail', 'error');
       return;
@@ -84,10 +88,12 @@ export class MailsenderComponent implements OnInit {
 
     this.collectdataService.sendMails(formData).subscribe({
       next: response => {
+        this.isLoading=false
         Swal.fire('Success', 'Emails sent successfully', 'success');
         this.mailForm.reset(); // Reset the form after sending mail
       },
       error: () => {
+        this.isLoading=false
         Swal.fire('Error', 'Failed to send emails', 'error');
       }
     });

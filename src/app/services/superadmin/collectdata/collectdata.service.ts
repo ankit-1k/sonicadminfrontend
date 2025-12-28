@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class CollectdataService {
-  private baseUrl='http://localhost:4300/api'
+  private baseUrl='https://sonicadminbackend.vercel.app/api'
 
   constructor(private http:HttpClient) { }
 

@@ -191,13 +191,8 @@
         <input type="text" class="w-100" pInputText formControlName="subject" />
       </div>
       <div class="field">
-        <label class="d-block">Message:</label>
-        <textarea
-          class="w-100"
-          pInputTextarea
-          rows="5"
-          formControlName="message"
-        ></textarea>
+        <label class="d-block">Messagea:</label>
+        <p-editor formControlName="message" [style]="{ height: '200px' }"></p-editor>
       </div>
       <button
         pButton

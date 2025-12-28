@@ -36,6 +36,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { CommonModule } from '@angular/common';
 import { OverlayPanelModule } from 'primeng/overlaypanel'
 import { AutoCompleteModule } from 'primeng/autocomplete';
+import { EditorModule } from 'primeng/editor';
 
 // components start ------------------------------------------------------------------>
 import { LoginComponent } from './login/login.component';
@@ -123,7 +124,8 @@ import { PhonemailerComponent } from './SuperAdmin/WpMailer/phonemailer/phonemai
     InputNumberModule,
     CommonModule ,
     OverlayPanelModule,
-    AutoCompleteModule
+    AutoCompleteModule,
+    EditorModule
   ],
   providers: [MessageService],
   bootstrap: [AppComponent]
