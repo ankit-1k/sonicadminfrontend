@@ -8,10 +8,9 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-sales',
   templateUrl: './sales.component.html',
-  styleUrls: ['./sales.component.scss']
+  styleUrls: ['./sales.component.scss'],
 })
 export class SalesComponent implements OnInit {
-
   basicData: any;
   basicOptions: any;
   selectedYear: string = '2024';
@@ -19,41 +18,44 @@ export class SalesComponent implements OnInit {
   totalSalesQuantity: number = 0;
   visibleAdd: boolean = false;
   visibleEdit: boolean = false;
-  visibleData: boolean = false
+  visibleData: boolean = false;
   position: string = 'right';
   chartData: any;
   chartOptions: ChartOptions = {};
-  salesForm: FormGroup
-  isLoading: boolean = false
+  salesForm: FormGroup;
+  isLoading: boolean = false;
   users = [];
-  searchedUsers:any[]=[]
+  searchedUsers: any[] = [];
   items = [
     { label: 'Red', value: 'red' },
     { label: 'Yellow', value: 'yellow' },
     { label: 'Green', value: 'green' },
   ];
-  user: string = ''
+  user: string = '';
   allSales: any[] = [];
   todaySales: any[] = [];
   totalTodaySalesAmount: number = 0;
 
   editingSalesId: any;
-  allNames: string[] = [];  // Array to store only names
-  allUsernames: string[] = [];  // Array to store only usernames
+  allNames: string[] = []; // Array to store only names
+  allUsernames: string[] = []; // Array to store only usernames
 
   filteredNames: string[] = [];
   filteredUsernames: string[] = [];
 
-  constructor(private fb: FormBuilder, private salesService: SalesService, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private salesService: SalesService,
+    private router: Router
+  ) {
     this.salesForm = this.fb.group({
       name: ['', Validators.required],
       userName: ['', Validators.required],
       date: ['', Validators.required],
-      accNo: [''],
       coName: ['', Validators.required],
       amount: ['', Validators.required],
-      status: ['', Validators.required]
-    })
+      status: ['', Validators.required],
+    });
   }
 
   mnt: any[] = [];
@@ -63,9 +65,8 @@ export class SalesComponent implements OnInit {
     this.position = position;
     this.salesForm.patchValue({
       name: user.name,
-      userName:user.userName,
+      userName: user.userName,
       date: user.date,
-      accNo: user.accNo,
       coName: user.coName,
       amount: user.amount,
       status: user.status,
@@ -78,27 +79,29 @@ export class SalesComponent implements OnInit {
     if (this.salesForm.valid) {
       if (this.editingSalesId) {
         // Edit mode
-        this.salesService.putSales(this.salesForm.value, this.editingSalesId).subscribe({
-          next: () => {
-            Swal.fire('Success', 'User Updated Successfully...', 'success');
-            this.isLoading = false;
-            this.salesForm.reset()
-            this.fetchSales(); 
-            this.getTodaySale()
-          },
-          error: () => {
-            Swal.fire('Failed!', 'Failed to update the user...', 'error');
-            this.isLoading = false;
-          },
-        });
+        this.salesService
+          .putSales(this.salesForm.value, this.editingSalesId)
+          .subscribe({
+            next: () => {
+              Swal.fire('Success', 'User Updated Successfully...', 'success');
+              this.isLoading = false;
+              this.salesForm.reset();
+              this.fetchSales();
+              this.getTodaySale();
+            },
+            error: () => {
+              Swal.fire('Failed!', 'Failed to update the user...', 'error');
+              this.isLoading = false;
+            },
+          });
       } else {
         // Add mode
         this.salesService.postSales(this.salesForm.value).subscribe({
           next: () => {
             Swal.fire('Success', 'User Added Successfully...', 'success');
             this.isLoading = false;
-            this.fetchSales(); 
-            this.getTodaySale()
+            this.fetchSales();
+            this.getTodaySale();
           },
           error: () => {
             Swal.fire('Failed!', 'Failed to add user...', 'error');
@@ -128,7 +131,7 @@ export class SalesComponent implements OnInit {
             Swal.fire('Deleted!', 'The sale has been deleted.', 'success');
             this.isLoading = false;
             this.fetchSales();
-            this.getTodaySale()
+            this.getTodaySale();
           },
           error: () => {
             Swal.fire('Failed!', 'Unable to delete the sale.', 'error');
@@ -140,16 +143,16 @@ export class SalesComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.fetchSales()
-    this.getAllTeleSale()
+    this.fetchSales();
+    this.getAllTeleSale();
     this.getTodaySale();
   }
 
   fetchSales() {
-    this.isLoading=true
+    this.isLoading = true;
     this.salesService.getSales().subscribe({
       next: (response) => {
-        this.isLoading=false
+        this.isLoading = false;
         this.users = response;
         const currentYear = new Date().getFullYear();
         let monthlyAmounts: { [key: string]: number } = {};
@@ -181,7 +184,7 @@ export class SalesComponent implements OnInit {
         const amounts = Object.values(monthlyAmounts);
 
         this.chartData = {
-          labels: months,  // Month names as x-axis labels
+          labels: months, // Month names as x-axis labels
           datasets: [
             {
               label: 'Total Amount',
@@ -216,13 +219,13 @@ export class SalesComponent implements OnInit {
         this.totalSalesQuantity = parseFloat(totalAmount.toFixed(2)); // Store the total sales as a number
       },
       error: (error) => {
-        this.isLoading=false
+        this.isLoading = false;
         console.error('Error fetching sales data', error);
       },
     });
   }
 
-  getTodaySale(){
+  getTodaySale() {
     this.salesService.getSales().subscribe((data: any[]) => {
       this.allSales = data;
       this.filterTodaySales();
@@ -234,63 +237,66 @@ export class SalesComponent implements OnInit {
     const todayYear = today.getFullYear();
     const todayMonth = today.getMonth();
     const todayDate = today.getDate();
-  
+
     this.todaySales = this.allSales.filter((sale: any) => {
       const saleDate = new Date(sale.date);
       const saleYear = saleDate.getFullYear();
       const saleMonth = saleDate.getMonth();
       const saleDay = saleDate.getDate();
-  
-      const isToday = saleYear === todayYear && saleMonth === todayMonth && saleDay === todayDate;
-  
+
+      const isToday =
+        saleYear === todayYear &&
+        saleMonth === todayMonth &&
+        saleDay === todayDate;
+
       console.log(`Comparing sale date ${saleDate} => isToday: ${isToday}`);
-  
+
       return isToday;
     });
-  
+
     this.totalTodaySalesAmount = this.todaySales.reduce(
       (sum: number, sale: any) => sum + Number(sale.amount),
       0
     );
-  
-    console.log('✅ Today\'s sales:', this.todaySales);
+
+    console.log("✅ Today's sales:", this.todaySales);
     console.log('💰 Total Amount:', this.totalTodaySalesAmount);
   }
-  
+
   getAllTeleSale() {
     this.salesService.getAllTeleSale().subscribe({
-      next: response => {
+      next: (response) => {
         if (response && Array.isArray(response)) {
-          this.allNames = response.map(item => item.name);
-          this.allUsernames = response.map(item => item.userName);
+          this.allNames = response.map((item) => item.name);
+          this.allUsernames = response.map((item) => item.userName);
         }
-      }
+      },
     });
   }
 
   filterNames(event: any) {
     let query = event.query.toLowerCase();
-    this.filteredNames = this.allNames.filter(name =>
+    this.filteredNames = this.allNames.filter((name) =>
       name.toLowerCase().includes(query)
     );
   }
 
   filterUsernames(event: any) {
     let query = event.query.toLowerCase();
-    this.filteredUsernames = this.allUsernames.filter(username =>
+    this.filteredUsernames = this.allUsernames.filter((username) =>
       username.toLowerCase().includes(query)
     );
   }
-  
+
   searchUser() {
     if (this.user) {
       this.salesService.searchUser(this.user).subscribe({
         next: response => {
           this.searchedUsers=response
         },
-        error: error => {
+        error: (error) => {
           console.log(error);
-        }
+        },
       });
     }
   }
@@ -303,13 +309,13 @@ export class SalesComponent implements OnInit {
   }
 
   showDialogData(position: string) {
-    this.position = position
-    this.visibleData = true
+    this.position = position;
+    this.visibleData = true;
   }
 
   navigateWithParam(value: string) {
-    this.router.navigate(['/telusers'], { 
-      queryParams: { data: value } 
+    this.router.navigate(['/telusers'], {
+      queryParams: { data: value },
     });
   }
 }

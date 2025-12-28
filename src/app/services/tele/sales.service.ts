@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class SalesService {
 
-  private baseSales='https://sonicadminbackend.vercel.app/api'
+  private baseSales='http://localhost:4300/api'
 
   constructor(private http:HttpClient) { }
 
