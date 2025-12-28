@@ -49,9 +49,15 @@
               <td>{{ user.userName }}</td>
               <td>{{ user.date | date : "shortDate" }}</td>
               <td>{{ user.accNo }}</td>
-              <td>{{ user.coName }}</td>
+              <td>
+                <span class="blur" [class.unblur]="user.showCoName" (dblclick)="user.showCoName = true">
+                  {{ user.coName }}
+                </span>
+              </td>
               <td>{{ user.amount | currency : "INR" : "symbol" : "1.2-2" }}</td>
-              <td>{{ user.status }}</td>
+              <td>
+                <span class="status-dot" [ngClass]="user.status"></span>
+              </td>
             </tr>
           </ng-template>
         </p-table>
@@ -160,7 +166,9 @@
               <li class="list-group-item d-flex justify-content-between align-items-center"
                   *ngFor="let sale of todaySales">
                 <span>
-                  <strong>{{ sale.name }}</strong> ({{ sale.coName }})
+                  <strong class="blur" [class.unblur]="sale.show" (dblclick)="sale.show = true">
+                    {{ sale.name }} ({{ sale.coName }})
+                  </strong>
                 </span>
                 <span class="badge bg-theme text-white">₹{{ sale.amount }}</span>
               </li>

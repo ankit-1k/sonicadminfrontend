@@ -49,7 +49,7 @@ export class SalesComponent implements OnInit {
       name: ['', Validators.required],
       userName: ['', Validators.required],
       date: ['', Validators.required],
-      accNo: ['', Validators.required],
+      accNo: [''],
       coName: ['', Validators.required],
       amount: ['', Validators.required],
       status: ['', Validators.required]
@@ -75,9 +75,6 @@ export class SalesComponent implements OnInit {
 
   submitSales() {
     this.isLoading = true;
-    this.visibleAdd = false;
-    this.visibleEdit = false;
-
     if (this.salesForm.valid) {
       if (this.editingSalesId) {
         // Edit mode
@@ -87,6 +84,7 @@ export class SalesComponent implements OnInit {
             this.isLoading = false;
             this.salesForm.reset()
             this.fetchSales(); 
+            this.getTodaySale()
           },
           error: () => {
             Swal.fire('Failed!', 'Failed to update the user...', 'error');
@@ -99,7 +97,8 @@ export class SalesComponent implements OnInit {
           next: () => {
             Swal.fire('Success', 'User Added Successfully...', 'success');
             this.isLoading = false;
-            this.fetchSales(); // Refresh data
+            this.fetchSales(); 
+            this.getTodaySale()
           },
           error: () => {
             Swal.fire('Failed!', 'Failed to add user...', 'error');
@@ -128,7 +127,8 @@ export class SalesComponent implements OnInit {
           next: () => {
             Swal.fire('Deleted!', 'The sale has been deleted.', 'success');
             this.isLoading = false;
-            this.fetchSales(); // Refresh the sales list
+            this.fetchSales();
+            this.getTodaySale()
           },
           error: () => {
             Swal.fire('Failed!', 'Unable to delete the sale.', 'error');
